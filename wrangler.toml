@@ -1,0 +1,9 @@
+# Cloudflare Pages project config (used by `wrangler pages deploy` and `wrangler pages dev`)
+name = "knowyourcar"
+pages_build_output_dir = "dist"
+compatibility_date = "2024-09-23"
+
+# Private R2 bucket holding the published .glb models, read by functions/models/[name].ts
+[[r2_buckets]]
+binding = "MODELS"
+bucket_name = "knowyourcar-models"
