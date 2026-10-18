@@ -49,9 +49,9 @@ const manifest = fs.existsSync(MANIFEST) ? JSON.parse(fs.readFileSync(MANIFEST, 
 const UPLOADED = path.join(OUT, 'uploaded.json');
 const uploaded = fs.existsSync(UPLOADED) ? JSON.parse(fs.readFileSync(UPLOADED, 'utf8')) : {};
 const inBucket = new Set(uploaded[bucket] ?? []);
-const run = (cmd, a) => {
+const run = (cmd, a, cwd = root) => {
   try {
-    return execFileSync(cmd, a, { stdio: ['ignore', 'pipe', 'pipe'], cwd: root }).toString();
+    return execFileSync(cmd, a, { stdio: ['ignore', 'pipe', 'pipe'], cwd }).toString();
   } catch (e) {
     throw new Error(`${cmd} ${a.slice(0, 6).join(' ')} … failed:\n${e.stderr?.toString() || e.message}`);
   }
@@ -113,6 +113,9 @@ for (const id of files) {
   console.log(`✓ ${id}: ${mb(fs.statSync(src).size)} → ${mb(buf.length)}  ${file}${tooBig ? '  (over 300 MB, skipped)' : ''}`);
   if (dryRun || tooBig) continue;
   if (local || !inBucket.has(file) || flag('--force')) {
+    // Local uploads must run in the project so they land in its .wrangler/ emulator state. Remote ones
+    // run outside it: wrangler 4 reads .env* files in its working directory, and a CI-scoped
+    // CLOUDFLARE_API_TOKEN there (which can't write to R2) would win over your `wrangler login`.
     run('npx', [
       '--yes',
       '-p',
@@ -129,7 +132,7 @@ for (const id of files) {
       '--cache-control',
       'public, max-age=31536000, immutable',
       local ? '--local' : '--remote',
-    ]);
+    ], local ? root : OUT);
     console.log(`  ↑ uploaded to ${local ? 'local emulator' : 'R2'} ${bucket}/${file}`);
     if (!local) {
       inBucket.add(file);
