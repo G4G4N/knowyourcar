@@ -193,7 +193,7 @@ export function Scene() {
         enableDamping
         dampingFactor={0.08}
         minDistance={1.2}
-        maxDistance={16}
+        maxDistance={30}
         maxPolarAngle={Math.PI * 0.495}
         onStart={() => {
           sim.dragging = true;

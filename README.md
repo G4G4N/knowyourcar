@@ -86,6 +86,12 @@ From then on every push deploys automatically. Re-run `npm run models:publish` o
 - Scope the Cloudflare token to what the deploy needs (Account · Cloudflare Pages · Edit) and keep it only
   in GitHub secrets. Local publishing uses `wrangler login` instead.
 
+### Versioning
+
+Label every PR with exactly one of `major`, `minor`, `patch` or `docs` (the **version label** check fails
+otherwise). Merging into `main` bumps the latest `vX.Y.Z` tag accordingly and publishes a GitHub Release
+with generated notes; `docs` merges don't release. The first release starts from `package.json`'s version.
+
 ### Test the production setup locally
 
 ```bash
