@@ -50,18 +50,19 @@ export function Car({ g, brand }: { g: Generation; brand: Brand }) {
     <group ref={root}>
       {modelUrl ? (
         <ModelBoundary key={modelUrl} fallback={procedural} onError={(m) => useStore.getState().setModelError(`Couldn't load that model: ${m}`)}>
-          <Suspense fallback={procedural}>
+          {/* no stand-in body while it downloads: ModelLoader (ui) shows progress instead */}
+          <Suspense fallback={null}>
             <RealModel url={modelUrl} l={l} align={align} genId={g.id} />
           </Suspense>
         </ModelBoundary>
       ) : (
         procedural
       )}
-      <HideWithRealModel>
+      <HideWithRealModel genId={g.id} hasModel={!!modelUrl}>
         <Wheels l={li} g={g} brand={brand} />
       </HideWithRealModel>
       {/* the real model has its own visible mechanicals; ours appear in X-ray */}
-      <HideWithRealModel>
+      <HideWithRealModel genId={g.id} hasModel={!!modelUrl}>
         <Suspension l={li} g={g} rig={rig} />
         {li.engine && <Engine l={li} g={g} brand={brand} rig={rig} />}
         <AirIntake rig={rig} />
@@ -77,13 +78,17 @@ export function Car({ g, brand }: { g: Generation; brand: Brand }) {
   );
 }
 
-/** The real model brings its own wheels and cabin; ours only appear in X-ray. */
-function HideWithRealModel({ children }: { children: ReactNode }) {
+/**
+ * The real model brings its own wheels and cabin; ours only appear in X-ray. While it is still
+ * loading, show nothing (not a generated car); if it fails, the generated car stands in fully.
+ */
+function HideWithRealModel({ children, genId, hasModel }: { children: ReactNode; genId: string; hasModel: boolean }) {
   const ref = useRef<THREE.Group>(null!);
   useFrame(() => {
     const s = useStore.getState();
-    const covered = !!s.realModel;
-    if (ref.current) ref.current.visible = !covered || sim.xray > 0.5;
+    const loaded = s.realModel === genId;
+    const show = !hasModel || !!s.modelError || (loaded && sim.xray > 0.5);
+    if (ref.current) ref.current.visible = show;
   });
   return <group ref={ref}>{children}</group>;
 }

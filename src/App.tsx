@@ -6,6 +6,7 @@ import { Dock, Gauges, HoverTip, SystemFilter, XrayToggle } from './ui/Dock';
 import { Garage } from './ui/Garage';
 import { InfoPanel } from './ui/InfoPanel';
 import { loadModelFile } from './ui/ModelCard';
+import { ModelLoader } from './ui/ModelLoader';
 
 export default function App() {
   const { brand, generation } = useCurrent();
@@ -56,6 +57,7 @@ export default function App() {
     <div className={`app ${xray ? 'is-xray' : ''} ${panelOpen ? '' : 'panels-closed'}`} style={{ ['--brand' as string]: brand.accent }}>
       <div className="stage">
         <Scene />
+        <ModelLoader />
       </div>
       <header className="topbar">
         <div className="logo">

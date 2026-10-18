@@ -1,0 +1,73 @@
+name: Version
+
+# Every PR carries exactly one label: major, minor, patch or docs.
+# When it merges into main, the version (from the latest vX.Y.Z tag, starting at package.json's) is
+# bumped accordingly, tagged and published as a GitHub Release. `docs` merges don't release.
+#
+# Security: no checkout and no third-party actions. The label check only reads event data; the
+# release job runs on `push` to main (never on PR code) and only creates a tag/release.
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled, unlabeled]
+  push:
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  label:
+    name: version label
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require exactly one of major / minor / patch / docs
+        env:
+          LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+        run: |
+          found=$(printf '%s' "$LABELS" | jq -r '.[] | select(. == "major" or . == "minor" or . == "patch" or . == "docs")')
+          n=$(printf '%s' "$found" | grep -c . || true)
+          if [ "$n" -ne 1 ]; then
+            echo "::error::Add exactly one label: major, minor, patch or docs (found: ${found:-none})."
+            exit 1
+          fi
+          echo "Version bump: $found" >> "$GITHUB_STEP_SUMMARY"
+
+  release:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write # create the tag and release
+      pull-requests: read # find the merged PR and its label
+    concurrency:
+      group: release
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      SHA: ${{ github.sha }}
+    steps:
+      - name: Tag and release
+        run: |
+          pr=$(gh api "repos/$REPO/commits/$SHA/pulls" --jq '[.[] | select(.merged_at != null)][0]')
+          if [ -z "$pr" ] || [ "$pr" = "null" ]; then echo "Not a PR merge; nothing to release."; exit 0; fi
+          number=$(printf '%s' "$pr" | jq -r .number)
+          bump=$(printf '%s' "$pr" | jq -r '[.labels[].name | select(. == "major" or . == "minor" or . == "patch" or . == "docs")][0] // "patch"')
+          echo "PR #$number → $bump"
+          if [ "$bump" = "docs" ]; then echo "docs change: no release." >> "$GITHUB_STEP_SUMMARY"; exit 0; fi
+
+          latest=$(gh api "repos/$REPO/tags?per_page=100" --jq '[.[].name | select(test("^v[0-9]+\\.[0-9]+\\.[0-9]+$"))] | sort_by(ltrimstr("v") | split(".") | map(tonumber)) | last // ""')
+          if [ -z "$latest" ]; then
+            base=$(gh api "repos/$REPO/contents/package.json?ref=$SHA" --jq '.content' | base64 -d | jq -r .version)
+          else
+            base=${latest#v}
+          fi
+          IFS=. read -r ma mi pa <<< "$base"
+          case "$bump" in
+            major) next="$((ma + 1)).0.0" ;;
+            minor) next="$ma.$((mi + 1)).0" ;;
+            *)     next="$ma.$mi.$((pa + 1))" ;;
+          esac
+          gh release create "v$next" --repo "$REPO" --target "$SHA" --title "v$next" --generate-notes
+          echo "### Released v$next ($bump, PR #$number)" >> "$GITHUB_STEP_SUMMARY"
