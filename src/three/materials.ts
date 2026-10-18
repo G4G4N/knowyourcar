@@ -18,7 +18,7 @@ export function makeXrayMaterial(color = '#5fd4ff') {
         vW = wp.xyz;
         vec4 mvPosition = viewMatrix * wp;
         vV = -mvPosition.xyz;
-        vN = normalize(normalMatrix * normal);
+        vN = normalMatrix * normal; // normalized (with a zero guard) in the fragment shader
         gl_Position = projectionMatrix * mvPosition;
         #include <clipping_planes_vertex>
       }
@@ -33,10 +33,18 @@ export function makeXrayMaterial(color = '#5fd4ff') {
       varying vec3 vW;
       void main() {
         #include <clipping_planes_fragment>
-        float f = 1.0 - abs(dot(normalize(vN), normalize(vV)));
+        // Guard every step: a facing-the-camera surface can give |dot| a hair above 1, and some
+        // meshes carry zero-length normals. Either produced NaN, and bloom smeared NaN pixels over
+        // the whole frame (black screen / black flashes from the top view or after part focus).
+        float nl = length(vN);
+        float vl = length(vV);
+        vec3 n = nl > 1e-6 ? vN / nl : vec3(0.0, 0.0, 1.0);
+        vec3 v = vl > 1e-6 ? vV / vl : vec3(0.0, 0.0, 1.0);
+        float f = clamp(1.0 - abs(dot(n, v)), 0.0, 1.0);
         float rim = pow(f, 2.4);
-        float scan = exp(-pow((fract(vW.x * 0.35 - uTime * 0.18) - 0.5) * 14.0, 2.0)) * 0.35;
-        float a = (rim * 0.85 + 0.03 + scan * rim) * uIntensity;
+        float d = (fract(vW.x * 0.35 - uTime * 0.18) - 0.5) * 14.0;
+        float scan = exp(-d * d) * 0.35;
+        float a = clamp((rim * 0.85 + 0.03 + scan * rim) * uIntensity, 0.0, 1.0);
         gl_FragColor = vec4(uColor * (0.5 + rim * 1.6 + scan), a);
       }
     `,

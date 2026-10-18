@@ -63,9 +63,34 @@ export interface RealWheels {
 function prepare(src: THREE.Object3D, l: Layout, align: Alignment, solidClip: THREE.Plane, ghostMat: THREE.ShaderMaterial): Prepared {
   const scene = src.clone(true);
   const meshes: THREE.Mesh[] = [];
+  const checked = new Set<THREE.BufferGeometry>();
   scene.traverse((o) => {
     const m = o as THREE.Mesh;
     if (!m.isMesh) return;
+    // broken normals (zero-length / NaN) make lighting shaders output NaN, which bloom spreads over the frame
+    if (!checked.has(m.geometry)) {
+      checked.add(m.geometry);
+      const nrm = m.geometry.getAttribute('normal');
+      let bad = !nrm;
+      if (nrm)
+        for (let i = 0; i < nrm.count && !bad; i++) {
+          const x = nrm.getX(i);
+          const y = nrm.getY(i);
+          const z = nrm.getZ(i);
+          const len = x * x + y * y + z * z;
+          bad = !(len > 1e-12) || !Number.isFinite(len);
+        }
+      if (bad) {
+        m.geometry.computeVertexNormals();
+        const fixed = m.geometry.getAttribute('normal');
+        for (let i = 0; i < fixed.count; i++) {
+          const x = fixed.getX(i);
+          const y = fixed.getY(i);
+          const z = fixed.getZ(i);
+          if (!(x * x + y * y + z * z > 1e-12) || !Number.isFinite(x + y + z)) fixed.setXYZ(i, 0, 1, 0);
+        }
+      }
+    }
     m.material = Array.isArray(m.material) ? m.material.map((x) => x.clone()) : m.material.clone();
     meshes.push(m);
   });

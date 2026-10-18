@@ -21,7 +21,7 @@ function Flow({ points, color, count = 60, speed = 0.25, size = 0.035, rpmScale 
         uniform float uSize;
         void main() {
           vec4 mv = modelViewMatrix * vec4(position, 1.0);
-          gl_PointSize = uSize * 900.0 / -mv.z;
+          gl_PointSize = uSize * 900.0 / max(0.05, -mv.z);
           gl_Position = projectionMatrix * mv;
         }
       `,
@@ -30,7 +30,7 @@ function Flow({ points, color, count = 60, speed = 0.25, size = 0.035, rpmScale 
         uniform float uOpacity;
         void main() {
           float d = length(gl_PointCoord - 0.5);
-          float a = smoothstep(0.5, 0.0, d);
+          float a = 1.0 - smoothstep(0.0, 0.5, d); // reversed smoothstep edges are undefined in GLSL
           gl_FragColor = vec4(uColor * (1.0 + a), a * uOpacity);
         }
       `,
