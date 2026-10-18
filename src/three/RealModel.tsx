@@ -7,7 +7,7 @@ import { PARTS, SYSTEMS, type PartId } from '../data/parts';
 import { sim, useStore } from '../store';
 import type { Layout } from './layout';
 import { makeXrayMaterial } from './materials';
-import { acceleratedRaycast, computeBoundsTree } from 'three-mesh-bvh';
+import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from 'three-mesh-bvh';
 import { partRegistry, refreshAvailable } from './Part';
 
 /** whole-word match where only letters count as part of a word (so `rim_FL` matches, `trim` doesn't) */
@@ -315,6 +315,37 @@ export function RealModel({ url, l, align, genId }: { url: string; l: Layout; al
   }, [P, genId]);
 
   useEffect(() => () => ghost.dispose(), [ghost]);
+
+  // Free GPU memory. Per-instance material clones go whenever the prepared scene changes (e.g. Flip);
+  // the model's geometry, textures and loader cache entry go when the car changes. Without this every
+  // model visited stayed on the GPU until the browser dropped the WebGL context (black canvas).
+  useEffect(
+    () => () => {
+      P.root.traverse((o) => {
+        const m = o as THREE.Mesh;
+        if (!m.isMesh || m.userData.ghost) return;
+        (Array.isArray(m.material) ? m.material : [m.material]).forEach((mm) => mm.dispose());
+      });
+    },
+    [P],
+  );
+  useEffect(
+    () => () => {
+      gltf.scene.traverse((o) => {
+        const m = o as THREE.Mesh;
+        if (!m.isMesh) return;
+        for (const mm of Array.isArray(m.material) ? m.material : [m.material]) {
+          for (const v of Object.values(mm)) if (v && (v as THREE.Texture).isTexture) (v as THREE.Texture).dispose();
+          mm.dispose();
+        }
+        const geo = m.geometry as THREE.BufferGeometry & { disposeBoundsTree?: () => void; boundsTree?: unknown };
+        if (geo.boundsTree) disposeBoundsTree.call(geo);
+        geo.dispose();
+      });
+      useGLTF.clear(url);
+    },
+    [gltf, url],
+  );
 
   // Pointer picking against a ~500k triangle model costs ~20 ms per mouse move without an acceleration
   // structure, which made orbiting stutter. Build BVHs in idle time after the model appears.

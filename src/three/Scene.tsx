@@ -1,7 +1,7 @@
 import { ContactShadows, Environment, Grid, Lightformer, OrbitControls } from '@react-three/drei';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Bloom, EffectComposer, Vignette } from '@react-three/postprocessing';
-import { Suspense, useEffect, useRef } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import type { OrbitControls as OrbitImpl } from 'three-stdlib';
 import { sim, useCurrent, useStore } from '../store';
@@ -148,13 +148,27 @@ function Floor() {
 export function Scene() {
   const { brand, generation } = useCurrent();
   const select = useStore((s) => s.select);
+  // If the GPU drops the WebGL context anyway (driver reset, memory pressure), rebuild the canvas
+  // instead of leaving a black view.
+  const [epoch, setEpoch] = useState(0);
   return (
     <Canvas
+      key={epoch}
       dpr={[1, 1.5]}
       camera={{ position: [5, 2.2, 5.5], fov: 34, near: 0.2, far: 120 }}
       gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.05 }}
       onPointerMissed={(e) => e.type === 'click' && select(null)}
-      onCreated={({ gl }) => (gl.localClippingEnabled = true)}
+      onCreated={({ gl }) => {
+        gl.localClippingEnabled = true;
+        gl.domElement.addEventListener(
+          'webglcontextlost',
+          (e) => {
+            e.preventDefault();
+            setTimeout(() => setEpoch((n) => n + 1), 300);
+          },
+          { once: true },
+        );
+      }}
     >
       <color attach="background" args={['#0a0d13']} />
       <fog attach="fog" args={['#0a0d13', 12, 34]} />

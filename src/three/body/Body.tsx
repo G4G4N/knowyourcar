@@ -98,6 +98,13 @@ export function Body({ l, g, brand, paint, built }: { l: Layout; g: Generation; 
     }
   });
 
+  // per-car materials (shared procedural textures are cached and kept)
+  useEffect(
+    () => () => {
+      for (const [k, v] of Object.entries(M)) if (k !== 'grille') (v as THREE.Material).dispose();
+    },
+    [M],
+  );
   useEffect(
     () => () => {
       for (const k of Object.keys(B) as (keyof BuiltBody)[]) {
