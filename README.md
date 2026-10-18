@@ -31,6 +31,68 @@ SKETCHFAB_TOKEN=your-token node scripts/fetch-model.mjs g80 https://sketchfab.co
 Check each model's licence (CC Attribution needs credit; NonCommercial ones can't be used commercially).
 Meshes named like `wheel`, `glass`, `headlight`, `seat`, `mirror`, `grille`… become clickable parts automatically, and separate wheel meshes spin.
 
+## Deploy (Cloudflare Pages + R2, via GitHub Actions)
+
+```
+GitHub push ──► Actions: npm ci → typecheck → build ──► Cloudflare Pages (app, ~1.5 MB)
+                                                             │
+                              browser ──GET /models/g80-<hash>.glb──► Pages Function ──► R2 bucket (private)
+```
+
+- **App** → Cloudflare Pages. `main` deploys to production; every pull request gets its own preview URL.
+- **3D models** → a private R2 bucket. They're too big for Pages (25 MiB per-file limit) and are git-ignored
+  for licensing, so they're published once from your machine. `functions/models/[name].ts` streams them from
+  the same domain (no public bucket, no CORS), with content-hashed names cached forever.
+- `src/data/deployed-models.json` (committed) lists what's in R2; the deployed lineup is exactly those cars.
+
+### One-time setup
+
+Use Node 24 for the deploy tooling (`nvm install 24 && nvm use`; `.nvmrc` is included). Wrangler 4 needs Node 22+.
+
+1. **Cloudflare**: log in and create the bucket and Pages project
+   ```bash
+   npx wrangler login
+   npx wrangler r2 bucket create knowyourcar-models
+   npx wrangler pages project create knowyourcar --production-branch main
+   ```
+   The R2 binding (`MODELS` → `knowyourcar-models`) is declared in `wrangler.toml` and applied on every
+   deploy, for production and previews alike, so there's nothing to set in the dashboard.
+2. **API token for CI**: Dashboard → My Profile → API Tokens → Create Token → "Edit Cloudflare Workers"
+   template (or custom: *Account → Cloudflare Pages → Edit*). Note your Account ID (Workers & Pages overview).
+3. **GitHub secrets** (repo → Settings → Secrets and variables → Actions):
+   `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
+4. **Publish the models** (optimizes ~6× with Draco + WebP, uploads, updates the manifest):
+   ```bash
+   npm run models:publish
+   git add src/data/deployed-models.json && git commit -m "Publish models"   # if it changed
+   git push
+   ```
+   File names are content hashes, so publishing the same models always produces the same manifest.
+
+From then on every push deploys automatically. Re-run `npm run models:publish` only when models change.
+
+**Licences:** publishing serves each model file to every visitor. CC-BY models are credited in the app
+(and marked as compressed). NonCommercial models are fine for a non-commercial site. Sketchfab
+"Standard"-licence models don't allow redistribution, so the publish script skips them unless you pass
+`--include-standard`.
+
+### CI security (public repo)
+
+- Workflows for pull requests from forks run with a read-only token and **no secrets**, and never deploy.
+  External contributors' runs also wait for a maintainer's approval (repo setting).
+- The build job runs the repo's code and npm packages but has no secrets; the deploy job has the Cloudflare
+  token but runs no project code, only the built site and a pinned wrangler.
+- Actions are pinned to commit SHAs; Dependabot proposes updates two weeks after each release.
+- Scope the Cloudflare token to what the deploy needs (Account · Cloudflare Pages · Edit) and keep it only
+  in GitHub secrets. Local publishing uses `wrangler login` instead.
+
+### Test the production setup locally
+
+```bash
+npx -p node@24 node scripts/publish-models.mjs --local   # into the local R2 emulator
+npm run cf:dev                                           # http://localhost:8788 (Pages + Function + R2)
+```
+
 ## Run it
 
 ```bash

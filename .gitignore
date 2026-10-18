@@ -9,3 +9,7 @@ dist
 src/assets/models/*.glb
 src/assets/models/*.gltf
 .claude/
+
+# local Cloudflare emulation state / optimized model output
+.wrangler/
+.models-out/

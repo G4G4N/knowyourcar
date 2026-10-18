@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { bundledModels, credits, loadAlignment } from '../data/models';
+import { modelUrls, credits, deployedModels, loadAlignment } from '../data/models';
 import { useCurrent, useStore } from '../store';
 
 export function modelSearchUrl(brand: string, model: string, code: string) {
@@ -23,7 +23,7 @@ export function ModelCard() {
   const error = useStore((s) => s.modelError);
   const align = useStore((s) => s.aligns[g.id]) ?? loadAlignment(g.id);
   const input = useRef<HTMLInputElement>(null);
-  const bundled = !!bundledModels[g.id];
+  const bundled = !!modelUrls[g.id];
   const credit = custom ? null : credits[g.id];
   const setAlign = (patch: Partial<typeof align>) => useStore.getState().setAlign(g.id, { ...align, ...patch });
 
@@ -40,6 +40,7 @@ export function ModelCard() {
                 ? (
                     <>
                       {credit.name ?? 'Model'} by {credit.author ?? 'unknown'} · {credit.license ?? 'see source'}
+                      {!import.meta.env.DEV && deployedModels[g.id] ? ' · compressed for web' : ''}
                       {credit.url && (
                         <>
                           {' · '}

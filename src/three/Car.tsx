@@ -2,7 +2,7 @@ import { useFrame } from '@react-three/fiber';
 import { Suspense, useEffect, useMemo, useRef, type ReactNode } from 'react';
 import * as THREE from 'three';
 import type { Brand, Generation } from '../data/types';
-import { bundledModels, loadAlignment } from '../data/models';
+import { modelUrls, loadAlignment } from '../data/models';
 import { sim, useStore } from '../store';
 import { Body, useBuiltBody } from './body/Body';
 import { Suspension, Wheels } from './Chassis';
@@ -43,7 +43,7 @@ export function Car({ g, brand }: { g: Generation; brand: Brand }) {
   const custom = useStore((s) => s.customModels[g.id]);
   const storedAlign = useStore((s) => s.aligns[g.id]);
   const align = useMemo(() => storedAlign ?? loadAlignment(g.id), [storedAlign, g.id]);
-  const modelUrl = custom?.url ?? bundledModels[g.id];
+  const modelUrl = custom?.url ?? modelUrls[g.id];
   const procedural = <Body l={l} g={g} brand={brand} built={built} paint={paintOverride ?? g.paint} />;
 
   return (

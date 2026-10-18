@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "models:find": "node scripts/find-models.mjs",
+    "models:fetch": "node scripts/fetch-model.mjs --all",
+    "models:publish": "node scripts/publish-models.mjs",
+    "cf:dev": "npm run build && npx --yes -p node@24 -p wrangler@4.147.0 wrangler pages dev"
   },
   "dependencies": {
     "@react-three/drei": "^9.114.0",
@@ -25,5 +29,8 @@
     "@vitejs/plugin-react": "^4.2.1",
     "typescript": "^5.4.5",
     "vite": "^4.5.5"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
