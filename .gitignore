@@ -1,0 +1,11 @@
+node_modules
+dist
+.DS_Store
+# secrets
+.env
+.env.*
+!.env.example
+# downloaded 3D models (licences vary; many forbid redistribution)
+src/assets/models/*.glb
+src/assets/models/*.gltf
+.claude/
