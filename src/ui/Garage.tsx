@@ -14,11 +14,10 @@ export function Garage() {
             role="tab"
             aria-selected={b.id === brand.id}
             className={`brand-tab ${b.id === brand.id ? 'on' : ''}`}
-            style={{ ['--accent' as string]: b.accent }}
             onClick={() => selectCar(b.id)}
             title={b.name}
           >
-            <BrandLogo id={b.id} size={22} />
+            <BrandLogo id={b.id} size={20} />
             <span>{b.name.split('-')[0]}</span>
           </button>
         ))}
@@ -43,7 +42,6 @@ export function Garage() {
       <div className="gen-timeline">
         {model.generations.map((g) => (
           <button key={g.id} className={`gen ${g.id === generation.id ? 'on' : ''}`} onClick={() => selectCar(brand.id, model.id, g.id)}>
-            <span className="gen-dot" style={{ background: g.paint }} />
             <span className="gen-code">{g.code}</span>
             <span className="gen-variant">{g.variant}</span>
             <span className="gen-years">{g.years}</span>

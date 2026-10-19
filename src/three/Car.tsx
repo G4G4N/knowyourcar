@@ -15,7 +15,6 @@ import { computeRig } from './rig';
 import { AirIntake, Cooling, Drivetrain, Electric, Exhaust, Fuel, Interior } from './Systems';
 
 export function Car({ g, brand }: { g: Generation; brand: Brand }) {
-  const paintOverride = useStore((s) => s.paint);
   const l = useMemo(() => computeLayout(g, brand), [g, brand]);
   const built = useBuiltBody(l, g, brand);
   // Mechanicals follow the real model's actual wheels when one is loaded
@@ -44,7 +43,7 @@ export function Car({ g, brand }: { g: Generation; brand: Brand }) {
   const storedAlign = useStore((s) => s.aligns[g.id]);
   const align = useMemo(() => storedAlign ?? loadAlignment(g.id), [storedAlign, g.id]);
   const modelUrl = custom?.url ?? modelUrls[g.id];
-  const procedural = <Body l={l} g={g} brand={brand} built={built} paint={paintOverride ?? g.paint} />;
+  const procedural = <Body l={l} g={g} brand={brand} built={built} paint={g.paint} />;
 
   return (
     <group ref={root}>
