@@ -102,8 +102,8 @@ export function computeLayout(g: Generation, brand: Brand): Layout {
     const banks: 1 | 2 = g.engine.layout.startsWith('V') ? 2 : 1;
     const cylPerBank = banks === 2 ? cyl / 2 : cyl;
     const borePerCyl = Math.cbrt((g.engine.displacement / cyl) * 0.001); // ~ bore ≈ stroke
-    const bore = borePerCyl * 1.05;
-    const stroke = borePerCyl * 0.95;
+    const bore = g.engine.bore ? g.engine.bore / 1000 : borePerCyl * 1.05;
+    const stroke = g.engine.stroke ? g.engine.stroke / 1000 : borePerCyl * 0.95;
     const pitch = bore * 1.18;
     const length = cylPerBank * pitch + (banks === 2 ? pitch * 0.5 : 0) + 0.1;
     const bankAngle =

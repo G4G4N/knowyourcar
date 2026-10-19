@@ -195,6 +195,16 @@ export function Cooling({ l, rig }: { l: Layout; rig: Rig }) {
           </mesh>
         </Part>
       )}
+      {rig.chargeCooler && (
+        <Part id="intercooler">
+          {/* water-cooled charge-air cooler on the engine, fed by a slim low-temperature radiator up front */}
+          <RoundBox size={[0.34, 0.07, 0.16]} radius={0.02} material={radMat} position={rig.chargeCooler} />
+          <mesh position={[x + 0.07, y + h * 0.75, 0]} material={radMat}>
+            <boxGeometry args={[0.025, h * 0.35, w * 0.7]} />
+          </mesh>
+          <Pipe points={[v(x + 0.07, y + h * 0.75, w * 0.3), v(rig.chargeCooler.x + 0.3, rig.chargeCooler.y + 0.05, 0.22), rig.chargeCooler.clone().add(v(0.17, 0, 0.05))]} r={0.01} material={mat('paint', '#2a6fb0')} />
+        </Part>
+      )}
       {rig.ev && (
         <Part id="batteryCooling">
           {rig.hvBattery && (
