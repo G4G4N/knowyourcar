@@ -13,6 +13,9 @@ export default function App() {
   const xray = useStore((s) => s.xray);
   const panelOpen = useStore((s) => s.panelOpen);
   const setPanelOpen = useStore((s) => s.setPanelOpen);
+  // Phones: the info sheet, system chips and dock can be tucked away to free up the view.
+  const sheetHidden = useStore((s) => s.sheetHidden);
+  const setSheetHidden = useStore((s) => s.setSheetHidden);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -54,7 +57,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className={`app ${xray ? 'is-xray' : ''} ${panelOpen ? '' : 'panels-closed'}`} style={{ ['--brand' as string]: brand.accent }}>
+    <div className={`app ${xray ? 'is-xray' : ''} ${panelOpen ? '' : 'panels-closed'} ${sheetHidden ? 'sheet-hidden' : ''}`} style={{ ['--brand' as string]: brand.accent }}>
       <div className="stage">
         <Scene />
         <ModelLoader />
@@ -83,6 +86,16 @@ export default function App() {
       <Gauges />
       <Dock />
       <HoverTip />
+      <button
+        className="sheet-toggle"
+        onClick={() => setSheetHidden(!sheetHidden)}
+        aria-label={sheetHidden ? 'Show controls' : 'Hide controls'}
+        aria-expanded={!sheetHidden}
+      >
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
       {dragging && (
         <div className="drop-overlay">
           <div>

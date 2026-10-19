@@ -23,6 +23,8 @@ interface AppState {
   sound: boolean;
   view: { preset: ViewPreset; n: number };
   panelOpen: boolean;
+  /** phones: info sheet, system chips and dock tucked away */
+  sheetHidden: boolean;
   available: PartId[];
   realModel: string | null;
   realModelWheels: boolean;
@@ -45,6 +47,7 @@ interface AppState {
   setSound: (v: boolean) => void;
   setView: (p: ViewPreset) => void;
   setPanelOpen: (v: boolean) => void;
+  setSheetHidden: (v: boolean) => void;
   setAvailable: (v: PartId[]) => void;
   setRealModel: (genId: string | null, hasWheels?: boolean, wheels?: AppState['realWheels']) => void;
   setCustomModel: (genId: string, v: { url: string; name: string } | null) => void;
@@ -78,6 +81,7 @@ export const useStore = create<AppState>((set, get) => ({
   sound: false,
   view: { preset: 'hero', n: 0 },
   panelOpen: window.innerWidth > 900,
+  sheetHidden: false,
   available: [],
   realModel: null,
   realModelWheels: false,
@@ -108,7 +112,7 @@ export const useStore = create<AppState>((set, get) => ({
   setSlowmo: (slowmo) => set({ slowmo }),
   setGear: (gear) => set({ gear }),
   setPaint: (paint) => set({ paint }),
-  select: (selected) => set({ selected, ...(selected && window.innerWidth <= 900 && { panelOpen: false }) }),
+  select: (selected) => set({ selected, ...(selected && window.innerWidth <= 900 && { panelOpen: false, sheetHidden: false }) }),
   // Pointer out/over fire back-to-back when moving between neighbouring meshes; clearing the hover
   // a beat later stops the highlight and tooltip from blinking off and on.
   hover: (hovered) => {
@@ -122,6 +126,7 @@ export const useStore = create<AppState>((set, get) => ({
   setSound: (sound) => set({ sound }),
   setView: (preset) => set({ view: { preset, n: get().view.n + 1 } }),
   setPanelOpen: (panelOpen) => set({ panelOpen }),
+  setSheetHidden: (sheetHidden) => set({ sheetHidden }),
   setAvailable: (available) => set({ available }),
   setRealModel: (realModel, hasWheels = false, wheels = null) => set({ realModel, realModelWheels: hasWheels, realWheels: realModel ? wheels : null }),
   setCustomModel: (genId, v) => {
