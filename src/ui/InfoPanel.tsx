@@ -2,9 +2,8 @@ import { useMemo } from 'react';
 import { PARTS, SYSTEMS, layoutName, partSpecs, tourSteps, transmissionName, type PartId } from '../data/parts';
 import type { SystemId } from '../data/types';
 import { useCurrent, useStore } from '../store';
+import { IconArrow, IconClose } from './icons';
 import { ModelCard } from './ModelCard';
-
-const SWATCHES = ['#1c1c1e', '#e8e8e6', '#8a8d8f', '#1f3b73', '#3c6e47', '#a51e2f', '#e0b200', '#5d6a73'];
 
 export function InfoPanel() {
   const { brand, generation: g } = useCurrent();
@@ -44,20 +43,18 @@ export function InfoPanel() {
             <p>{step.text}</p>
             <div className="tour-nav">
               <button className="btn ghost" onClick={() => go(tour! - 1)} disabled={tour === 0}>
-                ← Back
+                <IconArrow dir="left" /> Back
               </button>
               <button className="btn primary" onClick={() => go(tour! + 1)}>
-                {tour === steps.length - 1 ? 'Finish' : 'Next →'}
+                {tour === steps.length - 1 ? 'Finish' : 'Next'} {tour !== steps.length - 1 && <IconArrow />}
               </button>
             </div>
           </div>
         )}
         <div className="part-head">
-          <span className="sys-tag" style={{ ['--c' as string]: sys.color }}>
-            {sys.label}
-          </span>
+          <span className="sys-tag">{sys.label}</span>
           <button className="icon-btn" onClick={() => (setTour(null), select(null))} aria-label="Close">
-            ✕
+            <IconClose />
           </button>
         </div>
         <h2>{p.name}</h2>
@@ -135,8 +132,6 @@ export function InfoPanel() {
       </dl>
       <h3>3D model</h3>
       <ModelCard />
-      <h3>Paint</h3>
-      <PaintPicker defaultPaint={g.paint} name={g.paintName} />
       <h3>Good to know</h3>
       <ul className="facts">
         {g.facts.map((f) => (
@@ -151,7 +146,7 @@ export function InfoPanel() {
           select(steps[0].part);
         }}
       >
-        ▶ Take the guided tour: how it runs
+        Take the guided tour <IconArrow />
       </button>
       <PartsIndex />
     </aside>
@@ -166,20 +161,6 @@ function Stat({ v, u, l }: { v: number; u: string; l: string }) {
         <small>{u}</small>
       </div>
       <div className="stat-l">{l}</div>
-    </div>
-  );
-}
-
-function PaintPicker({ defaultPaint, name }: { defaultPaint: string; name: string }) {
-  const paint = useStore((s) => s.paint);
-  const setPaint = useStore((s) => s.setPaint);
-  return (
-    <div className="paint">
-      <button className={`swatch ${paint === null ? 'on' : ''}`} style={{ background: defaultPaint }} onClick={() => setPaint(null)} title={name} />
-      {SWATCHES.map((c) => (
-        <button key={c} className={`swatch ${paint === c ? 'on' : ''}`} style={{ background: c }} onClick={() => setPaint(c)} aria-label={`Paint ${c}`} />
-      ))}
-      <span className="paint-name">{paint === null ? name : 'Custom'}</span>
     </div>
   );
 }
@@ -203,7 +184,7 @@ function PartsIndex() {
       <div className="parts-index">
         {groups.map(([sys, ids]) => (
           <div key={sys} className="parts-group">
-            <div className="parts-group-label" style={{ color: SYSTEMS[sys].color }}>
+            <div className="parts-group-label">
               {SYSTEMS[sys].label}
             </div>
             <div className="chips">

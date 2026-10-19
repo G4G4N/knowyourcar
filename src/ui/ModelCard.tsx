@@ -30,7 +30,6 @@ export function ModelCard() {
   return (
     <div className="model-card">
       <div className="model-card-head">
-        <span className={`model-dot ${real ? 'on' : ''}`} />
         <div>
           <div className="model-card-title">{real ? 'Real 3D model' : error ? 'Generated model (real model rejected)' : custom || bundled ? 'Loading model…' : 'Generated model'}</div>
           <div className="model-card-sub">

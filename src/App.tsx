@@ -5,6 +5,8 @@ import { BrandLogo } from './ui/BrandLogo';
 import { Dock, Gauges, HoverTip, SystemFilter, XrayToggle } from './ui/Dock';
 import { Garage } from './ui/Garage';
 import { InfoPanel } from './ui/InfoPanel';
+import { IconChevron, IconMenu } from './ui/icons';
+import { Logo } from './ui/Logo';
 import { loadModelFile } from './ui/ModelCard';
 import { ModelLoader } from './ui/ModelLoader';
 
@@ -63,20 +65,18 @@ export default function App() {
         <ModelLoader />
       </div>
       <header className="topbar">
-        <div className="logo">
-          <span className="logo-mark" />
-          Know<b>Your</b>Car
-        </div>
+        <Logo />
         <div className="title">
-          <BrandLogo id={brand.id} size={18} />
-          <span>
-            {brand.name} <b>{generation.variant}</b> <em>{generation.code}</em>
-          </span>
+          <BrandLogo id={brand.id} size={16} />
+          <span className="title-brand">{brand.name}</span>
+          <span className="title-sep" />
+          <b>{generation.variant}</b>
+          <em>{generation.code}</em>
         </div>
         <div className="top-actions">
           <XrayToggle />
           <button className="icon-btn panels-btn" onClick={() => setPanelOpen(!panelOpen)} aria-label="Toggle panels">
-            ☰
+            <IconMenu />
           </button>
         </div>
       </header>
@@ -92,9 +92,7 @@ export default function App() {
         aria-label={sheetHidden ? 'Show controls' : 'Hide controls'}
         aria-expanded={!sheetHidden}
       >
-        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-          <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <IconChevron />
       </button>
       {dragging && (
         <div className="drop-overlay">

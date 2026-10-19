@@ -3,6 +3,7 @@ import { PARTS, SYSTEMS } from '../data/parts';
 import type { SystemId } from '../data/types';
 import { engineSound } from '../audio';
 import { sim, useCurrent, useStore, type ViewPreset } from '../store';
+import { IconPlay, IconPower, IconSound, IconStop } from './icons';
 
 const VIEWS: [ViewPreset, string][] = [
   ['hero', '3/4'],
@@ -23,11 +24,15 @@ export function XrayToggle() {
   const xray = useStore((s) => s.xray);
   const setXray = useStore((s) => s.setXray);
   return (
-    <button className={`xray-toggle ${xray ? 'on' : ''}`} onClick={() => setXray(!xray)} aria-pressed={xray} title="Toggle X-ray (X)">
-      <span className="xray-icon" />
-      <span>X-ray</span>
-      <kbd>X</kbd>
-    </button>
+    <div className={`xray-toggle ${xray ? 'on' : ''}`} role="group" aria-label="View mode (press X)">
+      <button className={xray ? '' : 'on'} onClick={() => setXray(false)} aria-pressed={!xray}>
+        Exterior
+      </button>
+      <button className={xray ? 'on' : ''} onClick={() => setXray(true)} aria-pressed={xray} title="X-ray (X)">
+        X-ray
+      </button>
+      <span className="xray-thumb" aria-hidden />
+    </div>
   );
 }
 
@@ -39,11 +44,20 @@ export function Dock() {
     <div className="dock">
       <div className="dock-group">
         <button className={`btn ${s.running ? 'running' : ''}`} onClick={() => s.setRunning(!s.running)} title="Start / stop">
-          {s.running ? '■ Stop' : ev ? '⚡ Power on' : '▶ Start engine'}
+          {s.running ? <IconStop /> : ev ? <IconPower /> : <IconPlay />}
+          <span>{s.running ? 'Stop' : ev ? 'Power on' : 'Start engine'}</span>
         </button>
         <label className="throttle">
           <span>{ev ? 'Accelerator' : 'Throttle'}</span>
-          <input type="range" min={0} max={1} step={0.01} value={s.throttle} onChange={(e) => s.setThrottle(+e.target.value)} />
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.01}
+            value={s.throttle}
+            style={{ ['--v' as string]: `${s.throttle * 100}%` }}
+            onChange={(e) => s.setThrottle(+e.target.value)}
+          />
         </label>
         {!ev && (
           <div className="gears" role="radiogroup" aria-label="Gear">
@@ -83,7 +97,7 @@ export function Dock() {
             s.setSound(!s.sound);
           }}
         >
-          {s.sound ? '🔊' : '🔈'}
+          <IconSound on={s.sound} />
         </button>
       </div>
     </div>
@@ -100,13 +114,12 @@ export function SystemFilter() {
   return (
     <div className="system-filter">
       <button className={system === null ? 'on' : ''} onClick={() => setSystem(null)}>
-        All systems
+        All
       </button>
       {(Object.keys(SYSTEMS) as SystemId[])
         .filter((k) => k !== 'body' && present.has(k))
         .map((k) => (
-          <button key={k} className={system === k ? 'on' : ''} style={{ ['--c' as string]: SYSTEMS[k].color }} onClick={() => setSystem(system === k ? null : k)}>
-            <i />
+          <button key={k} className={system === k ? 'on' : ''} onClick={() => setSystem(system === k ? null : k)}>
             {SYSTEMS[k].label}
           </button>
         ))}
@@ -138,6 +151,10 @@ export function Gauges() {
     <div className="gauges">
       <svg viewBox="0 0 140 80" className="gauge">
         <path d="M10 75 A60 60 0 0 1 130 75" className="gauge-bg" />
+        {Array.from({ length: 11 }).map((_, i) => {
+          const a = Math.PI * (1 - i / 10);
+          return <line key={i} x1={70 + 52 * Math.cos(a)} y1={75 - 52 * Math.sin(a)} x2={70 + 47 * Math.cos(a)} y2={75 - 47 * Math.sin(a)} className="gauge-tick" />;
+        })}
         <path ref={arcRef} d="M10 75 A60 60 0 0 1 130 75" className="gauge-fg" style={{ strokeDasharray: 188 }} />
         {!ev && <path d={`M${70 + 60 * Math.cos(Math.PI * (1 - 0.9))} ${75 - 60 * Math.sin(Math.PI * (1 - 0.9))} A60 60 0 0 1 130 75`} className="gauge-red" />}
       </svg>
@@ -164,8 +181,8 @@ export function HoverTip() {
   if (!hovered) return null;
   const p = PARTS[hovered];
   return (
-    <div className="hover-tip" style={{ left: pos.x + 14, top: pos.y + 14, ['--c' as string]: SYSTEMS[p.system].color }}>
-      <i />
+    <div className="hover-tip" style={{ left: pos.x + 14, top: pos.y + 14 }}>
+      <small>{SYSTEMS[p.system].label}</small>
       {p.name}
     </div>
   );

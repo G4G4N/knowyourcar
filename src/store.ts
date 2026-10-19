@@ -15,7 +15,6 @@ interface AppState {
   throttle: number; // 0..1
   slowmo: number; // visual time scale for engine internals
   gear: number;
-  paint: string | null;
   selected: PartId | null;
   hovered: PartId | null;
   system: SystemId | null;
@@ -39,7 +38,6 @@ interface AppState {
   setThrottle: (v: number) => void;
   setSlowmo: (v: number) => void;
   setGear: (v: number) => void;
-  setPaint: (v: string | null) => void;
   select: (p: PartId | null) => void;
   hover: (p: PartId | null) => void;
   setSystem: (s: SystemId | null) => void;
@@ -73,7 +71,6 @@ export const useStore = create<AppState>((set, get) => ({
   throttle: 0.15,
   slowmo: 0.04,
   gear: 3,
-  paint: null,
   selected: null,
   hovered: null,
   system: null,
@@ -98,7 +95,6 @@ export const useStore = create<AppState>((set, get) => ({
       brandId: brand.id,
       modelId: model.id,
       genId: gen.id,
-      paint: null,
       selected: null,
       tour: null,
       modelError: null,
@@ -111,7 +107,6 @@ export const useStore = create<AppState>((set, get) => ({
   setThrottle: (throttle) => set({ throttle }),
   setSlowmo: (slowmo) => set({ slowmo }),
   setGear: (gear) => set({ gear }),
-  setPaint: (paint) => set({ paint }),
   select: (selected) => set({ selected, ...(selected && window.innerWidth <= 900 && { panelOpen: false, sheetHidden: false }) }),
   // Pointer out/over fire back-to-back when moving between neighbouring meshes; clearing the hover
   // a beat later stops the highlight and tooltip from blinking off and on.

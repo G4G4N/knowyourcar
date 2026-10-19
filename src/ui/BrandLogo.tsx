@@ -10,9 +10,9 @@ export function BrandLogo({ id, size = 28 }: { id: string; size?: number }) {
   if (id === 'bmw')
     return (
       <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden>
-        <circle cx="12" cy="12" r="11" fill="#111" stroke="currentColor" strokeWidth="1.2" />
-        <path d="M12 5 A7 7 0 0 1 19 12 L12 12Z M12 19 A7 7 0 0 1 5 12 L12 12Z" fill="#2a7fd4" />
-        <path d="M19 12 A7 7 0 0 1 12 19 L12 12Z M5 12 A7 7 0 0 1 12 5 L12 12Z" fill="#f2f2f2" />
+        <circle cx="12" cy="12" r="10.75" fill="none" stroke="currentColor" strokeWidth="1.5" />
+        <circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.5" />
+        <path d="M12 5 A7 7 0 0 1 19 12 L12 12Z M12 19 A7 7 0 0 1 5 12 L12 12Z" fill="currentColor" />
       </svg>
     );
   return (
