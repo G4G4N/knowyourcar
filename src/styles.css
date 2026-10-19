@@ -1079,3 +1079,55 @@ button {
 @media (max-width: 900px) {
   .model-loader { top: 26%; }
 }
+
+/* Phones: arrow button that tucks the info sheet, system chips, gauges and dock out of the way */
+.sheet-toggle {
+  display: none;
+}
+@media (max-width: 900px) {
+  .sheet-toggle {
+    display: grid;
+    place-items: center;
+    position: fixed;
+    right: 12px;
+    bottom: 14px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(14, 19, 28, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #cfe6ff;
+    z-index: 30;
+    cursor: pointer;
+    transition: transform 0.25s ease;
+  }
+  .app.sheet-hidden .sheet-toggle {
+    transform: rotate(180deg);
+  }
+  /* leave room for the toggle next to the dock */
+  .app:not(.sheet-hidden) .dock {
+    right: 64px;
+    left: 12px;
+    transform: none;
+    max-width: none;
+  }
+  .info,
+  .system-filter,
+  .dock,
+  .gauges {
+    transition: transform 0.3s ease, opacity 0.25s ease;
+  }
+  .app.sheet-hidden .info,
+  .app.sheet-hidden .system-filter,
+  .app.sheet-hidden .dock {
+    transform: translateY(calc(100% + 60vh));
+    opacity: 0;
+    pointer-events: none;
+  }
+  .app.sheet-hidden .gauges {
+    opacity: 0;
+    pointer-events: none;
+  }
+}

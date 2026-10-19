@@ -96,14 +96,16 @@ function CameraRig() {
   }, [controls]);
 
   // On phones the info sheet covers the lower screen, so render the car higher up.
+  // With the sheet tucked away, centre it again.
   const size = useThree((s) => s.size);
+  const sheetHidden = useStore((s) => s.sheetHidden);
   useEffect(() => {
     const cam = camera as THREE.PerspectiveCamera;
-    if (size.width <= 900) cam.setViewOffset(size.width, size.height, 0, size.height * 0.17, size.width, size.height);
+    if (size.width <= 900) cam.setViewOffset(size.width, size.height, 0, sheetHidden ? 0 : size.height * 0.17, size.width, size.height);
     // desktop: centre the car in the gap between the garage (left) and info (right) panels
     else cam.setViewOffset(size.width, size.height, (392 - 288) / 2, 0, size.width, size.height);
     cam.updateProjectionMatrix();
-  }, [camera, size]);
+  }, [camera, size, sheetHidden]);
 
   useEffect(() => {
     if (import.meta.env.DEV) (window as unknown as { __kyc: unknown }).__kyc = { camera, controls, scene, gl };
