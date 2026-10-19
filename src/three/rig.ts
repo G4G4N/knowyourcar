@@ -175,17 +175,23 @@ export function computeRig(l: Layout, g: Generation, brand: Brand, rearX?: (y: n
       gearbox = { from: v(e.x - 0.02, ey, gz), to: v(e.x - 0.02, ey - 0.04, gz + 0.38), r0: 0.17, r1: 0.13 };
       frontDiff = v(l.xFA, axleY, gz + 0.12);
       if (drivenRear) {
-        transferCase = v(l.xFA - 0.18, axleY, 0.05);
-        rearDiff = v(l.xRA, axleY, 0);
-        propShaft = { from: transferCase, to: rearDiff };
+        // PTU beside the gearbox turns a prop shaft rearwards; the coupling (Haldex) or the
+        // torque splitter's twin clutches sit at the rear axle, not at the front.
+        const ptu = v(l.xFA - 0.18, axleY, 0.05);
+        const splitter = g.awd?.kind === 'torque-splitter';
+        transferCase = v(l.xRA + (splitter ? 0 : 0.2), axleY, 0);
+        rearDiff = splitter ? null : v(l.xRA, axleY, 0);
+        propShaft = { from: ptu, to: transferCase };
       }
     } else if (g.position === 'mid') {
       const gx0 = e.x - e.length / 2 - 0.04;
       gearbox = { from: v(gx0, ey, 0), to: v(l.xRA - 0.3, ey + 0.02, 0), r0: 0.18, r1: 0.14 };
       rearDiff = v(l.xRA, axleY, 0);
       if (drivenFront) {
+        // R8: the viscous coupling (Type 42) / multi-plate clutch (Type 4S) sits at the front axle
         frontDiff = v(l.xFA, axleY, 0);
-        frontProp = { from: v(e.x + e.length / 2 + 0.05, ey - 0.05, 0.1), to: v(l.xFA - 0.08, axleY, 0.1) };
+        transferCase = v(l.xFA - 0.2, axleY, 0.1);
+        frontProp = { from: v(e.x + e.length / 2 + 0.05, ey - 0.05, 0.1), to: transferCase };
       }
     } else if (g.id === 'c190') {
       // AMG GT: rear transaxle linked by a torque tube

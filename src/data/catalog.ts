@@ -34,7 +34,7 @@ export const BRANDS: Brand[] = [
             code: '8V', variant: 'A3 Sedan 40 TFSI', years: '2012–2020', body: 'sedan',
             dims: { length: 4458, width: 1796, height: 1416, wheelbase: 2637 },
             engine: { layout: 'I4', displacement: 2.0, code: 'EA888 Gen3', induction: 'turbo', hp: 190, torque: 320, redline: 6500 },
-            position: 'front-transverse', drivetrain: 'AWD', drivetrainName: 'quattro (Haldex)', transmission: 'dct', gears: 7,
+            position: 'front-transverse', drivetrain: 'AWD', drivetrainName: 'quattro (Haldex coupling)', awd: { kind: 'haldex' }, transmission: 'dct', gears: 7,
             zeroTo100: 6.2, topSpeed: 246, weight: 1450, rimInches: 18, paint: '#1d2a44', paintName: 'Navarra Blue',
             facts: [
               'Moved to the modular MQB platform, which made it ~80 kg lighter than its predecessor.',
@@ -44,8 +44,8 @@ export const BRANDS: Brand[] = [
           gen({
             code: '8Y', variant: 'RS 3 Sedan', years: '2021–present', body: 'sedan',
             dims: { length: 4542, width: 1851, height: 1412, wheelbase: 2631 },
-            engine: { layout: 'I5', displacement: 2.5, code: 'DNWA 2.5 TFSI', induction: 'turbo', hp: 401, torque: 500, redline: 7000 },
-            position: 'front-transverse', drivetrain: 'AWD', drivetrainName: 'quattro + torque splitter', transmission: 'dct', gears: 7,
+            engine: { layout: 'I5', displacement: 2.5, code: 'DNWA 2.5 TFSI', induction: 'turbo', hp: 400, torque: 500, redline: 7000 },
+            position: 'front-transverse', drivetrain: 'AWD', drivetrainName: 'quattro with RS torque splitter', awd: { kind: 'torque-splitter' }, transmission: 'dct', gears: 7,
             zeroTo100: 3.8, topSpeed: 290, weight: 1575, rimInches: 19, paint: '#5b8f3a', paintName: 'Kyalami Green',
             facts: [
               'The 2.5 TFSI five-cylinder fires 1-2-4-5-3, giving the warbling sound Audi made famous in rally.',
@@ -64,7 +64,7 @@ export const BRANDS: Brand[] = [
             code: 'B7', variant: 'A4 2.0T quattro', years: '2004–2008', body: 'sedan',
             dims: { length: 4586, width: 1772, height: 1427, wheelbase: 2648 },
             engine: { layout: 'I4', displacement: 2.0, code: 'EA113 TFSI', induction: 'turbo', hp: 200, torque: 280, redline: 6500 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (Torsen)', transmission: 'manual', gears: 6,
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (Torsen T-2 centre diff)', awd: { kind: 'torsen', split: '50:50' }, transmission: 'manual', gears: 6,
             zeroTo100: 7.2, topSpeed: 236, weight: 1530, rimInches: 17, paint: '#2a2c30', paintName: 'Brilliant Black',
             facts: [
               'Introduced Audi\'s big "singleframe" grille to the A4 range.',
@@ -75,7 +75,7 @@ export const BRANDS: Brand[] = [
             code: 'B8', variant: 'A4 2.0 TFSI quattro', years: '2008–2015', body: 'sedan',
             dims: { length: 4703, width: 1826, height: 1427, wheelbase: 2808 },
             engine: { layout: 'I4', displacement: 2.0, code: 'EA888 Gen2', induction: 'turbo', hp: 211, torque: 350, redline: 6500 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (crown-gear diff)', transmission: 'automatic', gears: 8,
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (self-locking centre diff)', awd: { kind: 'torsen', split: '40:60' }, transmission: 'automatic', gears: 8,
             zeroTo100: 6.6, topSpeed: 240, weight: 1580, rimInches: 18, paint: '#7a7f86', paintName: 'Monsoon Grey',
             facts: [
               'Audi moved the front differential ahead of the clutch on MLB, letting the front axle sit 154 mm further forward.',
@@ -85,8 +85,8 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'B9', id: 'b9-rs4', variant: 'RS 4 Avant', years: '2017–present', body: 'wagon',
             dims: { length: 4781, width: 1866, height: 1404, wheelbase: 2826 },
-            engine: { layout: 'V6', displacement: 2.9, code: 'EA839 2.9 TFSI', induction: 'twin-turbo', hotV: true, hp: 444, torque: 600, redline: 6800 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (self-locking diff)', transmission: 'automatic', gears: 8,
+            engine: { layout: 'V6', displacement: 2.9, code: 'EA839 2.9 TFSI', induction: 'twin-turbo', hotV: true, hp: 450, torque: 600, redline: 6800 },
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (crown-gear centre diff) + sport differential', awd: { kind: 'crown-gear', split: '40:60' }, transmission: 'automatic', gears: 8,
             zeroTo100: 4.1, topSpeed: 280, weight: 1790, rimInches: 20, paint: '#8a8d8f', paintName: 'Nardo Grey',
             facts: [
               'RS 4 has always been an Avant (wagon) — a tradition that started with the 1999 B5 RS 4.',
@@ -105,7 +105,7 @@ export const BRANDS: Brand[] = [
             code: 'C7', variant: 'A6 3.0 TFSI quattro', years: '2011–2018', body: 'sedan',
             dims: { length: 4915, width: 1874, height: 1455, wheelbase: 2912 },
             engine: { layout: 'V6', displacement: 3.0, code: 'CREC 3.0 TFSI', induction: 'supercharged', hp: 333, torque: 440, redline: 6800 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (crown-gear diff)', transmission: 'automatic', gears: 7,
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (crown-gear centre diff)', awd: { kind: 'crown-gear', split: '40:60' }, transmission: 'dct', gears: 7,
             zeroTo100: 5.1, topSpeed: 250, weight: 1770, rimInches: 19, paint: '#2f3236', paintName: 'Daytona Grey',
             facts: [
               'Despite the "TFSI" badge, this 3.0 V6 uses a Roots-type supercharger sitting in the V of the engine.',
@@ -116,7 +116,7 @@ export const BRANDS: Brand[] = [
             code: 'C8', variant: 'A6 55 TFSI quattro', years: '2018–present', body: 'sedan',
             dims: { length: 4939, width: 1886, height: 1457, wheelbase: 2924 },
             engine: { layout: 'V6', displacement: 3.0, code: 'EA839 3.0 TFSI', induction: 'turbo', hotV: true, hp: 340, torque: 500, redline: 6500 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro ultra', transmission: 'dct', gears: 7,
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro ultra', awd: { kind: 'ultra' }, transmission: 'dct', gears: 7,
             zeroTo100: 5.1, topSpeed: 250, weight: 1825, rimInches: 20, paint: '#e8e8e6', paintName: 'Glacier White',
             facts: [
               'Standard 48-volt mild-hybrid system lets the engine coast with the engine off between 55 and 160 km/h.',
@@ -133,8 +133,8 @@ export const BRANDS: Brand[] = [
           gen({
             code: '8R', variant: 'Q5 2.0 TFSI quattro', years: '2008–2017', body: 'suv',
             dims: { length: 4629, width: 1880, height: 1653, wheelbase: 2807 },
-            engine: { layout: 'I4', displacement: 2.0, code: 'EA888', induction: 'turbo', hp: 220, torque: 350, redline: 6500 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (Torsen)', transmission: 'automatic', gears: 8,
+            engine: { layout: 'I4', displacement: 2.0, code: 'EA888', induction: 'turbo', hp: 225, torque: 350, redline: 6500 },
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (Torsen centre diff)', awd: { kind: 'torsen', split: '40:60' }, transmission: 'automatic', gears: 8,
             zeroTo100: 7.1, topSpeed: 222, weight: 1810, rimInches: 19, paint: '#3a4a3c', paintName: 'Lava Grey',
             facts: [
               'Built on the MLB platform shared with the B8 A4.',
@@ -144,8 +144,8 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'FY', variant: 'SQ5 3.0 TFSI', years: '2017–2024', body: 'suv',
             dims: { length: 4671, width: 1893, height: 1635, wheelbase: 2824 },
-            engine: { layout: 'V6', displacement: 3.0, code: 'EA839', induction: 'turbo', hotV: true, hp: 349, torque: 500, redline: 6500 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (self-locking diff)', transmission: 'automatic', gears: 8,
+            engine: { layout: 'V6', displacement: 3.0, code: 'EA839', induction: 'turbo', hotV: true, hp: 354, torque: 500, redline: 6500 },
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (self-locking centre diff)', awd: { kind: 'crown-gear', split: '40:60' }, transmission: 'automatic', gears: 8,
             zeroTo100: 5.4, topSpeed: 250, weight: 1945, rimInches: 21, paint: '#a3262a', paintName: 'Tango Red',
             facts: [
               'Uses a single twin-scroll turbo inside the V; the twin-scroll design keeps exhaust pulses separated for faster response.',
@@ -163,7 +163,7 @@ export const BRANDS: Brand[] = [
             code: 'Type 42', id: 'type42', variant: 'R8 V10', years: '2006–2015', body: 'coupe',
             dims: { length: 4431, width: 1904, height: 1252, wheelbase: 2650 },
             engine: { layout: 'V10', displacement: 5.2, code: 'BUJ 5.2 FSI', induction: 'NA', hp: 525, torque: 530, redline: 8700 },
-            position: 'mid', drivetrain: 'AWD', drivetrainName: 'quattro (viscous coupling)', transmission: 'manual', gears: 6,
+            position: 'mid', drivetrain: 'AWD', drivetrainName: 'quattro (viscous coupling at the front axle)', awd: { kind: 'viscous-front' }, transmission: 'manual', gears: 6,
             zeroTo100: 3.9, topSpeed: 316, weight: 1620, rimInches: 19, paint: '#d6d8da', paintName: 'Suzuka Grey',
             facts: [
               'Shares its aluminium space frame and V10 with the Lamborghini Gallardo.',
@@ -174,8 +174,8 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'Type 4S', id: 'type4s', variant: 'R8 V10 performance', years: '2015–2024', body: 'coupe',
             dims: { length: 4429, width: 1940, height: 1240, wheelbase: 2650 },
-            engine: { layout: 'V10', displacement: 5.2, code: 'DKAA 5.2 FSI', induction: 'NA', hp: 612, torque: 580, redline: 8700 },
-            position: 'mid', drivetrain: 'AWD', drivetrainName: 'quattro (multi-plate clutch)', transmission: 'dct', gears: 7,
+            engine: { layout: 'V10', displacement: 5.2, code: 'DKAA 5.2 FSI', induction: 'NA', hp: 620, torque: 580, redline: 8700 },
+            position: 'mid', drivetrain: 'AWD', drivetrainName: 'quattro (front-axle multi-plate clutch)', awd: { kind: 'clutch-front' }, transmission: 'dct', gears: 7,
             zeroTo100: 3.1, topSpeed: 331, weight: 1595, rimInches: 20, paint: '#e0b200', paintName: 'Vegas Yellow',
             facts: [
               'One of the last naturally aspirated V10s on sale — it revs to 8,700 rpm.',
@@ -193,8 +193,8 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'F8', variant: 'RS e-tron GT', years: '2021–present', body: 'fastback',
             dims: { length: 4989, width: 1964, height: 1396, wheelbase: 2900 },
-            engine: { layout: 'EV', displacement: 0, code: 'PSM ×2', induction: 'electric', hp: 637, torque: 830, redline: 16000, motors: { front: true, rear: true }, batteryKWh: 93.4 },
-            position: 'ev', drivetrain: 'AWD', drivetrainName: 'electric quattro', transmission: 'single-speed', gears: 2,
+            engine: { layout: 'EV', displacement: 0, code: 'PSM ×2', induction: 'electric', hp: 646, torque: 830, redline: 16000, motors: { front: true, rear: true }, batteryKWh: 93.4 },
+            position: 'ev', drivetrain: 'AWD', drivetrainName: 'electric quattro (motor per axle)', awd: { kind: 'dual-motor' }, transmission: 'single-speed', gears: 2,
             zeroTo100: 3.3, topSpeed: 250, weight: 2347, rimInches: 21, paint: '#5d6a73', paintName: 'Kemora Grey',
             facts: [
               'Runs an 800-volt architecture, allowing DC fast charging at up to 270 kW.',
@@ -256,7 +256,7 @@ export const BRANDS: Brand[] = [
             code: 'G20', variant: 'M340i xDrive', years: '2019–present', body: 'sedan',
             dims: { length: 4709, width: 1827, height: 1435, wheelbase: 2851 },
             engine: { layout: 'I6', displacement: 3.0, code: 'B58B30O1', induction: 'turbo', hp: 374, torque: 500, redline: 7000 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'xDrive', transmission: 'automatic', gears: 8,
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'xDrive', awd: { kind: 'xdrive' }, transmission: 'automatic', gears: 8,
             zeroTo100: 4.4, topSpeed: 250, weight: 1745, rimInches: 19, paint: '#1f3b73', paintName: 'Portimao Blue',
             facts: [
               'xDrive uses an electronically controlled multi-plate clutch in the transfer case, rear-biased by default.',
@@ -318,11 +318,12 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'G80', variant: 'M3 Competition xDrive', years: '2021–present', body: 'sedan',
             dims: { length: 4794, width: 1903, height: 1433, wheelbase: 2857 },
-            engine: { layout: 'I6', displacement: 3.0, code: 'S58B30', induction: 'twin-turbo', hp: 530, torque: 650, redline: 7200 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'M xDrive', transmission: 'automatic', gears: 8,
+            engine: { layout: 'I6', displacement: 3.0, code: 'S58B30', induction: 'twin-turbo', hp: 510, torque: 650, redline: 7200 },
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'M xDrive', awd: { kind: 'xdrive' }, transmission: 'automatic', gears: 8,
             zeroTo100: 3.5, topSpeed: 290, weight: 1780, rimInches: 19, paint: '#3c6e47', paintName: 'Isle of Man Green',
             facts: [
               'M xDrive has a 2WD mode that disconnects the front axle entirely for rear-drive only.',
+              'Launched with 510 PS; the 2024 facelift raised the Competition xDrive to 530 PS.',
               'The S58 uses a 3D-printed cylinder head core to route coolant passages impossible to cast traditionally.',
               'Those tall vertical kidney grilles are a nod to the 1930s BMW 328.',
             ],
@@ -360,7 +361,7 @@ export const BRANDS: Brand[] = [
             code: 'F90', variant: 'M5 Competition', years: '2018–2024', body: 'sedan',
             dims: { length: 4966, width: 1903, height: 1469, wheelbase: 2982 },
             engine: { layout: 'V8', displacement: 4.4, code: 'S63B44T4', induction: 'twin-turbo', hotV: true, hp: 625, torque: 750, redline: 7200 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'M xDrive', transmission: 'automatic', gears: 8,
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'M xDrive', awd: { kind: 'xdrive' }, transmission: 'automatic', gears: 8,
             zeroTo100: 3.3, topSpeed: 305, weight: 1940, rimInches: 20, paint: '#4e5d3d', paintName: 'Frozen Dark Green',
             facts: [
               'First M5 with all-wheel drive — but with a 2WD mode for full rear-drive.',
@@ -371,7 +372,7 @@ export const BRANDS: Brand[] = [
             code: 'G60', variant: 'i5 M60 xDrive', years: '2023–present', body: 'sedan',
             dims: { length: 5060, width: 1900, height: 1505, wheelbase: 2995 },
             engine: { layout: 'EV', displacement: 0, code: 'eDrive Gen5', induction: 'electric', hp: 601, torque: 820, redline: 17000, motors: { front: true, rear: true }, batteryKWh: 81.2 },
-            position: 'ev', drivetrain: 'AWD', drivetrainName: 'xDrive (dual motor)', transmission: 'single-speed', gears: 1,
+            position: 'ev', drivetrain: 'AWD', drivetrainName: 'xDrive (motor per axle)', awd: { kind: 'dual-motor' }, transmission: 'single-speed', gears: 1,
             zeroTo100: 3.8, topSpeed: 230, weight: 2380, rimInches: 21, paint: '#2e3740', paintName: 'Frozen Deep Grey',
             facts: [
               'BMW\'s fifth-gen eDrive motors use electrically excited synchronous motors — no rare-earth magnets.',
@@ -389,7 +390,7 @@ export const BRANDS: Brand[] = [
             code: 'E53', variant: 'X5 4.4i', years: '1999–2006', body: 'suv',
             dims: { length: 4667, width: 1872, height: 1707, wheelbase: 2820 },
             engine: { layout: 'V8', displacement: 4.4, code: 'M62B44', induction: 'NA', hp: 286, torque: 440, redline: 6000 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'xDrive precursor (38:62 diff)', transmission: 'automatic', gears: 5,
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'permanent AWD (38:62 planetary centre diff)', awd: { kind: 'planetary', split: '38:62' }, transmission: 'automatic', gears: 5,
             zeroTo100: 7.5, topSpeed: 206, weight: 2170, rimInches: 18, paint: '#2a2f38', paintName: 'Orient Blue',
             facts: [
               'BMW called it a "Sports Activity Vehicle" — it used a unibody, not a truck ladder frame.',
@@ -400,11 +401,11 @@ export const BRANDS: Brand[] = [
             code: 'G05', variant: 'X5 xDrive40i', years: '2018–present', body: 'suv',
             dims: { length: 4922, width: 2004, height: 1745, wheelbase: 2975 },
             engine: { layout: 'I6', displacement: 3.0, code: 'B58B30', induction: 'turbo', hp: 381, torque: 540, redline: 7000 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'xDrive', transmission: 'automatic', gears: 8,
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'xDrive', awd: { kind: 'xdrive' }, transmission: 'automatic', gears: 8,
             zeroTo100: 5.4, topSpeed: 250, weight: 2200, rimInches: 21, paint: '#5a6b7a', paintName: 'Phytonic Blue',
             facts: [
               'Built in Spartanburg, South Carolina — BMW\'s largest plant worldwide.',
-              'Optional two-axle air suspension can raise the car by 80 mm for off-road use.',
+              'Optional two-axle air suspension varies ride height over an 80 mm range, up for off-road and down at speed.',
             ],
           }),
         ],
@@ -504,7 +505,7 @@ export const BRANDS: Brand[] = [
             code: 'W206', variant: 'C 63 S E PERFORMANCE', years: '2023–present', body: 'sedan',
             dims: { length: 4842, width: 1900, height: 1446, wheelbase: 2875 },
             engine: { layout: 'I4', displacement: 2.0, code: 'M139l', induction: 'turbo', hp: 680, torque: 1020, redline: 7200, hybrid: true, batteryKWh: 6.1, motors: { front: false, rear: true } },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: '4MATIC+', transmission: 'automatic', gears: 9,
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'AMG Performance 4MATIC+', awd: { kind: 'clutch-variable' }, transmission: 'automatic', gears: 9,
             zeroTo100: 3.4, topSpeed: 280, weight: 2111, rimInches: 20, paint: '#6a6f73', paintName: 'Graphite Grey',
             facts: [
               'Swapped the V8 for a 2.0 four-cylinder with an F1-derived electric turbocharger plus a rear-axle e-motor.',
@@ -534,7 +535,7 @@ export const BRANDS: Brand[] = [
             code: 'W213', variant: 'E 450 4MATIC', years: '2016–2023', body: 'sedan',
             dims: { length: 4923, width: 1852, height: 1468, wheelbase: 2939 },
             engine: { layout: 'I6', displacement: 3.0, code: 'M256', induction: 'turbo', hp: 367, torque: 500, redline: 6500 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: '4MATIC (31:69)', transmission: 'automatic', gears: 9,
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: '4MATIC', awd: { kind: 'planetary', split: '31:69' }, transmission: 'automatic', gears: 9,
             zeroTo100: 5.0, topSpeed: 250, weight: 1850, rimInches: 19, paint: '#1d1f22', paintName: 'Obsidian Black',
             facts: [
               'The M256 marked Mercedes\' return to inline-six engines after 20 years of V6s.',
@@ -544,7 +545,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'W214', variant: 'E 350', years: '2023–present', body: 'sedan',
             dims: { length: 4949, width: 1880, height: 1468, wheelbase: 2961 },
-            engine: { layout: 'I4', displacement: 2.0, code: 'M254', induction: 'turbo', hp: 255, torque: 400, redline: 6200 },
+            engine: { layout: 'I4', displacement: 2.0, code: 'M254', induction: 'turbo', hp: 258, torque: 400, redline: 6200 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'automatic', gears: 9,
             zeroTo100: 6.2, topSpeed: 250, weight: 1795, rimInches: 19, paint: '#d7d7d4', paintName: 'Polar White',
             facts: [
@@ -574,7 +575,7 @@ export const BRANDS: Brand[] = [
             code: 'W223', variant: 'S 580 4MATIC', years: '2020–present', body: 'sedan',
             dims: { length: 5289, width: 1954, height: 1503, wheelbase: 3216 },
             engine: { layout: 'V8', displacement: 4.0, code: 'M176', induction: 'twin-turbo', hotV: true, hp: 503, torque: 700, redline: 6500 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: '4MATIC', transmission: 'automatic', gears: 9,
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: '4MATIC', awd: { kind: 'planetary', split: '45:55' }, transmission: 'automatic', gears: 9,
             zeroTo100: 4.4, topSpeed: 250, weight: 2245, rimInches: 20, paint: '#253046', paintName: 'Nautical Blue',
             facts: [
               'Rear-axle steering up to 10° makes the 5.3 m sedan turn like a compact car.',
@@ -592,7 +593,7 @@ export const BRANDS: Brand[] = [
             code: 'W463', variant: 'G 55 AMG', years: '1990–2018', body: 'offroad',
             dims: { length: 4662, width: 1760, height: 1931, wheelbase: 2850 },
             engine: { layout: 'V8', displacement: 5.4, code: 'M113K', induction: 'supercharged', hp: 507, torque: 700, redline: 6000 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: '4MATIC + 3 locking diffs', transmission: 'automatic', gears: 5,
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'permanent AWD + 3 locking diffs', awd: { kind: 'g-locks', split: '50:50' }, transmission: 'automatic', gears: 5,
             zeroTo100: 5.5, topSpeed: 210, weight: 2550, rimInches: 19, paint: '#2a2a2a', paintName: 'Obsidian Black',
             facts: [
               'Body-on-frame construction with solid axles front and rear — and three locking differentials.',
@@ -603,7 +604,7 @@ export const BRANDS: Brand[] = [
             code: 'W463A', id: 'w463a', variant: 'G 63 AMG', years: '2018–present', body: 'offroad',
             dims: { length: 4873, width: 1984, height: 1966, wheelbase: 2890 },
             engine: { layout: 'V8', displacement: 4.0, code: 'M177', induction: 'twin-turbo', hotV: true, hp: 585, torque: 850, redline: 6500 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: '4MATIC (40:60) + 3 locking diffs', transmission: 'automatic', gears: 9,
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'AMG Performance 4MATIC + 3 locking diffs', awd: { kind: 'g-locks', split: '40:60' }, transmission: 'automatic', gears: 9,
             zeroTo100: 4.5, topSpeed: 220, weight: 2560, rimInches: 22, paint: '#4c5a3a', paintName: 'Desert Sand / Olive',
             facts: [
               'Switched to independent front suspension for the first time — but kept the solid rear axle.',
@@ -641,7 +642,7 @@ export const BRANDS: Brand[] = [
             code: 'V297', variant: 'EQS 580 4MATIC', years: '2021–present', body: 'fastback',
             dims: { length: 5216, width: 1926, height: 1512, wheelbase: 3210 },
             engine: { layout: 'EV', displacement: 0, code: 'eATS ×2', induction: 'electric', hp: 523, torque: 855, redline: 15000, motors: { front: true, rear: true }, batteryKWh: 107.8 },
-            position: 'ev', drivetrain: 'AWD', drivetrainName: '4MATIC (dual motor)', transmission: 'single-speed', gears: 1,
+            position: 'ev', drivetrain: 'AWD', drivetrainName: '4MATIC (motor per axle)', awd: { kind: 'dual-motor' }, transmission: 'single-speed', gears: 1,
             zeroTo100: 4.3, topSpeed: 210, weight: 2585, rimInches: 21, paint: '#3a3f47', paintName: 'Sodalite Blue',
             facts: [
               'Drag coefficient of 0.20 — the most aerodynamic production car in the world at launch.',

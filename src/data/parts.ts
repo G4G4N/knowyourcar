@@ -333,7 +333,7 @@ export function partSpecs(id: PartId, g: Generation, brand: Brand): [string, str
         ['Code', e.code ?? '—'],
         ['Layout', layoutName(e.layout)],
         ['Displacement', `${fmt(Math.round(e.displacement * 1000))} cc`],
-        ['Power', `${e.hp} hp`],
+        ['Power', `${e.hp} PS (${Math.round(e.hp * 0.7355)} kW)`],
         ['Torque', `${e.torque} Nm`],
         ['Redline', `${fmt(e.redline)} rpm`],
       ];
@@ -341,17 +341,17 @@ export function partSpecs(id: PartId, g: Generation, brand: Brand): [string, str
       return [
         ['Cylinders', `${cyl}`],
         ['Per-cylinder', `${Math.round((e.displacement * 1000) / cyl)} cc`],
-        ['Power per litre', `${Math.round(e.hp / e.displacement)} hp/L`],
+        ['Power per litre', `${Math.round(e.hp / e.displacement)} PS/L`],
       ];
     case 'crankshaft':
       return [
-        ['Firing order', firingOrderLabel(e.layout)],
+        ['Firing order', firingOrderLabel(e.layout, brand.id)],
         ['Power strokes / rev', `${cyl / 2}`],
       ];
     case 'turbo':
       return [
         ['Induction', e.induction],
-        ['Placement', e.hotV ? 'Hot-V (inside the V)' : 'Exhaust side'],
+        ['Placement', e.induction === 'supercharged' ? 'In the V, belt-driven from the crank' : e.hotV ? 'Hot-V (inside the V)' : 'Exhaust side'],
       ];
     case 'gearbox':
       return [
@@ -366,7 +366,7 @@ export function partSpecs(id: PartId, g: Generation, brand: Brand): [string, str
     case 'motorFront':
     case 'motorRear':
       return [
-        ['Combined power', `${e.hp} hp`],
+        ['Combined power', `${e.hp} PS (${Math.round(e.hp * 0.7355)} kW)`],
         ['Combined torque', `${e.torque} Nm`],
         ['Max motor speed', `${fmt(e.redline)} rpm`],
       ];
@@ -374,8 +374,15 @@ export function partSpecs(id: PartId, g: Generation, brand: Brand): [string, str
       return [['Rim size', `${g.rimInches}"`]];
     case 'fuelTank':
       return [['Typical capacity', `${g.body === 'suv' || g.body === 'offroad' ? '80–100' : g.body === 'hatch' ? '50–55' : '60–80'} L`]];
-    case 'transferCase':
-      return [['System', `${brand.name} ${g.drivetrainName ?? 'AWD'}`]];
+    case 'transferCase': {
+      const a = awdCopy(g);
+      return [
+        ['System', g.drivetrainName ?? 'AWD'],
+        ['Hardware', a.hardware],
+        ['Where', a.where],
+        ['Front : rear', g.awd?.split ?? a.split],
+      ];
+    }
     default:
       return [];
   }
@@ -409,7 +416,10 @@ export function transmissionName(g: Generation): string {
   }[g.transmission];
 }
 
-export function firingOrderLabel(layout: string): string {
+export function firingOrderLabel(layout: string, brandId?: string): string {
+  // Mercedes numbers cylinders bank by bank (1–4 right, 5–8 left), so the same V8 sequence reads differently
+  if (brandId === 'mercedes' && layout === 'V8') return '1-5-4-2-6-3-7-8';
+  if (brandId === 'mercedes' && layout === 'V12') return '—';
   return (
     {
       I4: '1-3-4-2',
@@ -424,7 +434,7 @@ export function firingOrderLabel(layout: string): string {
 }
 
 /** A guided walkthrough of how the car makes and delivers power. */
-export function tourSteps(g: Generation): { part: PartId; title: string; text: string }[] {
+export function tourSteps(g: Generation, brandId?: string): { part: PartId; title: string; text: string }[] {
   if (g.engine.layout === 'EV') {
     const steps: { part: PartId; title: string; text: string }[] = [
       { part: 'chargePort', title: 'Plug in', text: 'Energy enters through the charge port and is stored in the battery.' },
@@ -450,7 +460,7 @@ export function tourSteps(g: Generation): { part: PartId; title: string; text: s
   steps.push(
     { part: 'intake', title: 'Distribute', text: 'The intake manifold feeds air to each cylinder\'s intake valves.' },
     { part: 'pistons', title: 'Bang', text: 'Fuel is injected, the spark fires and the expanding gas forces each piston down. Watch the orange flashes — that\'s the power stroke.' },
-    { part: 'crankshaft', title: 'Rotate', text: `The crankshaft turns the up-and-down motion into rotation. Firing order: ${firingOrderLabel(g.engine.layout)}.` },
+    { part: 'crankshaft', title: 'Rotate', text: `The crankshaft turns the up-and-down motion into rotation.${firingOrderLabel(g.engine.layout, brandId) !== '—' ? ` Firing order: ${firingOrderLabel(g.engine.layout, brandId)}.` : ''}` },
     { part: 'gearbox', title: 'Multiply', text: `The ${transmissionName(g)} picks the right ratio for the speed you want.` },
   );
   if (g.drivetrain === 'AWD') steps.push({ part: 'transferCase', title: 'Split', text: `${g.drivetrainName ?? 'AWD'} divides torque between the front and rear axles.` });
@@ -464,4 +474,144 @@ export function tourSteps(g: Generation): { part: PartId; title: string; text: s
     { part: 'tailpipes', title: 'Exit', text: '…and exit through the silencers and tailpipes.' },
   );
   return steps;
+}
+
+/**
+ * What the AWD hardware on this exact car is, where it sits and how it splits torque.
+ * Sources: Audi technology portal (quattro, quattro ultra, R8), BMW and Mercedes press material.
+ */
+export function awdCopy(g: Generation): { name: string; summary: string; how: string; hardware: string; where: string; split: string } {
+  switch (g.awd?.kind) {
+    case 'torsen':
+      return {
+        name: 'Torsen centre differential',
+        summary: 'A purely mechanical, self-locking diff that splits torque between the axles.',
+        how: `Worm gears inside the Torsen diff let the front and rear axles turn at different speeds through bends, but resist slip: when one axle loses grip, internal friction pushes more torque to the axle that still has it — no sensors, no electronics. At rest it splits ${g.awd.split ?? '50:50'} front to rear.`,
+        hardware: 'Torsen worm-gear differential',
+        where: 'Rear of the gearbox',
+        split: '50:50',
+      };
+    case 'crown-gear':
+      return {
+        name: 'Crown-gear centre differential',
+        summary: 'Audi’s self-locking centre diff: mechanical, and lighter than the Torsen it replaced.',
+        how: `Two crown gears are driven by four spinning pinions; clutch packs behind them lock the diff progressively when one axle slips. Normally ${g.awd.split ?? '40:60'} front to rear, it can send up to 70 % to the front or 85 % to the rear, entirely mechanically.`,
+        hardware: 'Crown-gear self-locking differential',
+        where: 'Rear of the gearbox',
+        split: '40:60',
+      };
+    case 'ultra':
+      return {
+        name: 'quattro ultra clutch',
+        summary: 'All-wheel drive that switches itself off: front-wheel drive until the rear is needed.',
+        how: 'There is no centre differential. A multi-plate clutch at the gearbox output, driven by an electric motor, connects the prop shaft to the rear axle; a dog clutch in the rear diff disconnects the rear half-shafts too, so the whole rear drivetrain stops turning when cruising. Sensors predict slip (steering angle, throttle, lateral acceleration) and re-engage the rear axle in a fraction of a second, before the wheels spin.',
+        hardware: 'Multi-plate clutch + rear dog clutch',
+        where: 'Gearbox output / rear differential',
+        split: 'Front-biased, up to 100 % front',
+      };
+    case 'haldex':
+      return {
+        name: 'Haldex coupling',
+        summary: 'An electro-hydraulic clutch at the rear axle that brings in rear drive on demand.',
+        how: 'With a transverse engine, the gearbox drives the front wheels directly; a power take-off unit (PTU) beside it turns a prop shaft to the back. Just ahead of the rear diff, a multi-plate Haldex coupling clamps its plates with oil pressure to send torque rearwards — almost nothing when cruising, up to about half when the fronts slip or you accelerate hard.',
+        hardware: 'Multi-plate coupling (electro-hydraulic)',
+        where: 'In front of the rear differential',
+        split: 'Front-biased, variable',
+      };
+    case 'torque-splitter':
+      return {
+        name: 'RS torque splitter',
+        summary: 'Two clutches instead of a rear differential, one per rear wheel.',
+        how: 'Each rear half-shaft has its own electronically controlled multi-plate clutch. Sending more torque to the outside rear wheel in a bend actively turns the car (torque vectoring); with all torque to one side it can even drift. Up to 50 % goes rearwards, and all of that can go to a single wheel.',
+        hardware: 'Two multi-plate clutches',
+        where: 'Rear axle (replaces the rear diff)',
+        split: 'Up to 50 % rear, per-wheel',
+      };
+    case 'xdrive':
+      return {
+        name: 'xDrive transfer case',
+        summary: 'A multi-plate clutch that decides how much torque goes to the front axle.',
+        how: 'The rear axle is always driven. Behind the gearbox, an electronically controlled multi-plate clutch feeds a chain or gear drive to a front prop shaft, which runs beside the engine sump to the front diff. The DSC computer varies the clamp force continuously, rear-biased by default and shifting forward when the rears slip.' + (g.id === 'g80' || g.id === 'f90' ? ' M xDrive adds 4WD Sport and a 2WD mode that opens the clutch completely for pure rear drive.' : ''),
+        hardware: 'Electronically controlled multi-plate clutch',
+        where: 'Behind the gearbox, front shaft offset to one side',
+        split: 'Variable, rear-biased',
+      };
+    case 'planetary':
+      return {
+        name: 'Planetary centre differential',
+        summary: `An open planetary-gear diff with a fixed ${g.awd.split} front-to-rear split.`,
+        how: `A planetary gearset sizes the torque split: the planet carrier drives the sun gear (front) and ring gear (rear) in a fixed ${g.awd.split} ratio, while still letting the axles turn at different speeds. Because it is open, traction control brakes a slipping wheel to push torque to the others.`,
+        hardware: 'Open planetary differential',
+        where: 'Transfer case behind the gearbox',
+        split: g.awd.split ?? '—',
+      };
+    case 'clutch-variable':
+      return {
+        name: '4MATIC+ clutch',
+        summary: 'A fully variable multi-plate clutch that sends between 0 and 50 % to the front.',
+        how: 'The rear axle is driven permanently; an electromechanically controlled multi-plate clutch varies front-axle torque continuously from zero to half, based on slip, steering and throttle. Drift mode opens it completely for rear-wheel drive.',
+        hardware: 'Electromechanical multi-plate clutch',
+        where: 'Transfer case behind the gearbox',
+        split: 'Variable, 0–50 % front',
+      };
+    case 'viscous-front':
+      return {
+        name: 'Viscous coupling',
+        summary: 'A silicone-filled coupling that sends torque to the front wheels when the rears slip.',
+        how: 'Mid-engined, so the rear axle is driven directly. A prop shaft runs forward from the engine to the front axle, where a viscous coupling sits: thin plates in thick silicone fluid. When the rear wheels spin faster than the fronts, the fluid shears, heats and stiffens, dragging the front axle along. Normal driving stays strongly rear-biased.',
+        hardware: 'Viscous coupling',
+        where: 'Front-axle drive, ahead of the cabin',
+        split: 'Rear-biased, front on demand',
+      };
+    case 'clutch-front':
+      return {
+        name: 'Front-axle clutch',
+        summary: 'An electro-hydraulic multi-plate clutch at the front axle, with no fixed base split.',
+        how: 'A prop shaft runs forward from the mid-mounted engine to the front axle. There, a water-cooled multi-plate clutch controlled by the quattro computer decides how much torque reaches the front wheels — anything from none to, in theory, all of it — based on grip, steering and driving mode.',
+        hardware: 'Electro-hydraulic multi-plate clutch',
+        where: 'Front axle, with the front diff',
+        split: 'Fully variable',
+      };
+    case 'g-locks':
+      return {
+        name: 'Transfer case & locking diffs',
+        summary: `Permanent all-wheel drive with a ${g.awd.split} centre diff, low range and three diff locks.`,
+        how: `The transfer case behind the gearbox splits torque ${g.awd.split} front to rear and has a low-range reduction for crawling. For serious terrain the centre, rear and front differentials can each be locked solid in that order, so every wheel turns at the same speed no matter how little grip it has.`,
+        hardware: 'Centre diff + low range, 3 locking diffs',
+        where: 'Transfer case behind the gearbox',
+        split: g.awd.split ?? '—',
+      };
+    case 'dual-motor':
+      return {
+        name: 'Dual-motor drive',
+        summary: 'One electric motor per axle — no prop shaft or centre differential at all.',
+        how: 'Each axle has its own motor and reduction gear. The computer decides front/rear torque by simply commanding each motor, hundreds of times a second, and can run on the rear motor alone for efficiency.',
+        hardware: 'Motor on each axle',
+        where: 'Front and rear axles',
+        split: 'Fully variable',
+      };
+    default:
+      return {
+        name: PARTS.transferCase.name,
+        summary: PARTS.transferCase.summary,
+        how: PARTS.transferCase.how,
+        hardware: '—',
+        where: 'Behind the gearbox',
+        split: 'Variable',
+      };
+  }
+}
+
+/** Part name/summary/explanation, specialised to this car where the generic text would be wrong. */
+export function partCopy(id: PartId, g: Generation): { name: string; summary: string; how: string } {
+  if (id === 'transferCase' && g.awd) {
+    const a = awdCopy(g);
+    return { name: a.name, summary: a.summary, how: a.how };
+  }
+  if (id === 'rearDiff' && g.awd?.kind === 'ultra')
+    return { ...PARTS.rearDiff, how: PARTS.rearDiff.how + ' On quattro ultra a dog clutch inside it disconnects the half-shafts when the rear axle isn’t needed.' };
+  if (id === 'frontDiff' && g.position === 'front-longitudinal' && g.awd && ['torsen', 'crown-gear', 'ultra'].includes(g.awd.kind))
+    return { ...PARTS.frontDiff, how: PARTS.frontDiff.how + ' On Audi’s longitudinal quattro the front diff is built into the gearbox casing, with the engine hanging ahead of the front axle.' };
+  const p = PARTS[id];
+  return { name: p.name, summary: p.summary, how: p.how };
 }

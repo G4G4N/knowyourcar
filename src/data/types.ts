@@ -23,6 +23,30 @@ export type EnginePosition =
 
 export type Transmission = 'manual' | 'automatic' | 'dct' | 'single-speed';
 
+/**
+ * How an all-wheel-drive car splits torque between the axles. Decides both the explanation and
+ * where the hardware sits in the 3D rig.
+ */
+export type AwdKind =
+  | 'torsen' // Audi longitudinal: Torsen worm-gear self-locking centre diff behind the gearbox
+  | 'crown-gear' // Audi longitudinal: crown-gear self-locking centre diff behind the gearbox
+  | 'ultra' // Audi quattro ultra: clutch at gearbox output + dog clutch in rear diff, FWD-biased, no centre diff
+  | 'haldex' // transverse: front PTU + electro-hydraulic multi-plate coupling at the rear axle
+  | 'torque-splitter' // transverse: two rear clutches, one per wheel, instead of a rear diff
+  | 'xdrive' // BMW: multi-plate clutch transfer case behind the gearbox, rear-biased, variable
+  | 'planetary' // open planetary centre diff with a fixed split (non-AMG 4MATIC, BMW E53)
+  | 'clutch-variable' // AMG 4MATIC+: multi-plate clutch, 0–50 % to the front
+  | 'viscous-front' // Audi R8 (Type 42): viscous coupling in the front-axle drive
+  | 'clutch-front' // Audi R8 (Type 4S): electro-hydraulic multi-plate clutch at the front axle
+  | 'g-locks' // Mercedes G-Class: centre diff + low range transfer case + three locking diffs
+  | 'dual-motor'; // EV: one motor per axle, no mechanical link
+
+export interface Awd {
+  kind: AwdKind;
+  /** nominal front:rear torque split, e.g. "40:60"; omit when fully variable */
+  split?: string;
+}
+
 export interface Generation {
   id: string;
   /** Chassis / internal code, e.g. "G80", "B9", "W206" */
@@ -53,6 +77,7 @@ export interface Generation {
   drivetrain: Drivetrain;
   /** Brand name for AWD system etc. */
   drivetrainName?: string;
+  awd?: Awd;
   transmission: Transmission;
   gears: number;
   zeroTo100: number; // seconds
