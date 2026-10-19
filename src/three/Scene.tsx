@@ -103,7 +103,7 @@ function CameraRig() {
     const cam = camera as THREE.PerspectiveCamera;
     if (size.width <= 900) cam.setViewOffset(size.width, size.height, 0, sheetHidden ? 0 : size.height * 0.17, size.width, size.height);
     // desktop: centre the car in the gap between the garage (left) and info (right) panels
-    else cam.setViewOffset(size.width, size.height, (392 - 288) / 2, 0, size.width, size.height);
+    else cam.setViewOffset(size.width, size.height, sheetHidden ? 0 : (392 - 288) / 2, 0, size.width, size.height);
     cam.updateProjectionMatrix();
   }, [camera, size, sheetHidden]);
 
