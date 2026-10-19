@@ -22,7 +22,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: '8P', variant: 'A3 2.0 TFSI', years: '2003–2012', body: 'hatch',
             dims: { length: 4214, width: 1765, height: 1421, wheelbase: 2578 },
-            engine: { layout: 'I4', displacement: 2.0, code: 'EA113', induction: 'turbo', hp: 200, torque: 280, redline: 6500 },
+            engine: { layout: 'I4', displacement: 2.0, code: 'EA113', bore: 82.5, stroke: 92.8, chargeCooling: 'front', induction: 'turbo', hp: 200, torque: 280, redline: 6500 },
             position: 'front-transverse', drivetrain: 'FWD', transmission: 'dct', gears: 6,
             zeroTo100: 7.3, topSpeed: 237, weight: 1340, rimInches: 17, paint: '#b9bcc0', paintName: 'Ice Silver',
             facts: [
@@ -33,7 +33,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: '8V', variant: 'A3 Sedan 40 TFSI', years: '2012–2020', body: 'sedan',
             dims: { length: 4458, width: 1796, height: 1416, wheelbase: 2637 },
-            engine: { layout: 'I4', displacement: 2.0, code: 'EA888 Gen3', induction: 'turbo', hp: 190, torque: 320, redline: 6500 },
+            engine: { layout: 'I4', displacement: 2.0, code: 'EA888 Gen3', bore: 82.5, stroke: 92.8, chargeCooling: 'front', induction: 'turbo', hp: 190, torque: 320, redline: 6500 },
             position: 'front-transverse', drivetrain: 'AWD', drivetrainName: 'quattro (Haldex coupling)', awd: { kind: 'haldex' }, transmission: 'dct', gears: 7,
             zeroTo100: 6.2, topSpeed: 246, weight: 1450, rimInches: 18, paint: '#1d2a44', paintName: 'Navarra Blue',
             facts: [
@@ -44,7 +44,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: '8Y', variant: 'RS 3 Sedan', years: '2021–present', body: 'sedan',
             dims: { length: 4542, width: 1851, height: 1412, wheelbase: 2631 },
-            engine: { layout: 'I5', displacement: 2.5, code: 'DNWA 2.5 TFSI', induction: 'turbo', hp: 400, torque: 500, redline: 7000 },
+            engine: { layout: 'I5', displacement: 2.5, code: 'DNWA 2.5 TFSI', bore: 82.5, stroke: 92.8, chargeCooling: 'front', induction: 'turbo', hp: 400, torque: 500, redline: 7000 },
             position: 'front-transverse', drivetrain: 'AWD', drivetrainName: 'quattro with RS torque splitter', awd: { kind: 'torque-splitter' }, transmission: 'dct', gears: 7,
             zeroTo100: 3.8, topSpeed: 290, weight: 1575, rimInches: 19, paint: '#5b8f3a', paintName: 'Kyalami Green',
             facts: [
@@ -63,7 +63,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'B7', variant: 'A4 2.0T quattro', years: '2004–2008', body: 'sedan',
             dims: { length: 4586, width: 1772, height: 1427, wheelbase: 2648 },
-            engine: { layout: 'I4', displacement: 2.0, code: 'EA113 TFSI', induction: 'turbo', hp: 200, torque: 280, redline: 6500 },
+            engine: { layout: 'I4', displacement: 2.0, code: 'EA113 TFSI', bore: 82.5, stroke: 92.8, chargeCooling: 'front', induction: 'turbo', hp: 200, torque: 280, redline: 6500 },
             position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (Torsen T-2 centre diff)', awd: { kind: 'torsen', split: '50:50' }, transmission: 'manual', gears: 6,
             zeroTo100: 7.2, topSpeed: 236, weight: 1530, rimInches: 17, paint: '#2a2c30', paintName: 'Brilliant Black',
             facts: [
@@ -72,9 +72,9 @@ export const BRANDS: Brand[] = [
             ],
           }),
           gen({
-            code: 'B8', variant: 'A4 2.0 TFSI quattro', years: '2008–2015', body: 'sedan',
+            code: 'B8', fuelTankL: 65, variant: 'A4 2.0 TFSI quattro', years: '2008–2015', body: 'sedan',
             dims: { length: 4703, width: 1826, height: 1427, wheelbase: 2808 },
-            engine: { layout: 'I4', displacement: 2.0, code: 'EA888 Gen2', induction: 'turbo', hp: 211, torque: 350, redline: 6500 },
+            engine: { layout: 'I4', displacement: 2.0, code: 'EA888 Gen2', bore: 82.5, stroke: 92.8, chargeCooling: 'front', induction: 'turbo', hp: 211, torque: 350, redline: 6500 },
             position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (self-locking centre diff)', awd: { kind: 'torsen', split: '40:60' }, transmission: 'automatic', gears: 8,
             zeroTo100: 6.6, topSpeed: 240, weight: 1580, rimInches: 18, paint: '#7a7f86', paintName: 'Monsoon Grey',
             facts: [
@@ -85,7 +85,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'B9', id: 'b9-rs4', variant: 'RS 4 Avant', years: '2017–present', body: 'wagon',
             dims: { length: 4781, width: 1866, height: 1404, wheelbase: 2826 },
-            engine: { layout: 'V6', displacement: 2.9, code: 'EA839 2.9 TFSI', induction: 'twin-turbo', hotV: true, hp: 450, torque: 600, redline: 6800 },
+            engine: { layout: 'V6', displacement: 2.9, code: 'EA839 2.9 TFSI', bore: 84.5, stroke: 86.0, chargeCooling: 'engine', induction: 'twin-turbo', hotV: true, hp: 450, torque: 600, redline: 6800 },
             position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (crown-gear centre diff) + sport differential', awd: { kind: 'crown-gear', split: '40:60' }, transmission: 'automatic', gears: 8,
             zeroTo100: 4.1, topSpeed: 280, weight: 1790, rimInches: 20, paint: '#8a8d8f', paintName: 'Nardo Grey',
             facts: [
@@ -104,7 +104,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'C7', variant: 'A6 3.0 TFSI quattro', years: '2011–2018', body: 'sedan',
             dims: { length: 4915, width: 1874, height: 1455, wheelbase: 2912 },
-            engine: { layout: 'V6', displacement: 3.0, code: 'CREC 3.0 TFSI', induction: 'supercharged', hp: 333, torque: 440, redline: 6800 },
+            engine: { layout: 'V6', displacement: 3.0, code: 'CREC 3.0 TFSI', bore: 84.5, stroke: 89.0, chargeCooling: 'engine', induction: 'supercharged', hp: 333, torque: 440, redline: 6800 },
             position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (crown-gear centre diff)', awd: { kind: 'crown-gear', split: '40:60' }, transmission: 'dct', gears: 7,
             zeroTo100: 5.1, topSpeed: 250, weight: 1770, rimInches: 19, paint: '#2f3236', paintName: 'Daytona Grey',
             facts: [
@@ -115,8 +115,8 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'C8', variant: 'A6 55 TFSI quattro', years: '2018–present', body: 'sedan',
             dims: { length: 4939, width: 1886, height: 1457, wheelbase: 2924 },
-            engine: { layout: 'V6', displacement: 3.0, code: 'EA839 3.0 TFSI', induction: 'turbo', hotV: true, hp: 340, torque: 500, redline: 6500 },
-            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro ultra', awd: { kind: 'ultra' }, transmission: 'dct', gears: 7,
+            engine: { layout: 'V6', displacement: 3.0, code: 'EA839 3.0 TFSI', bore: 84.5, stroke: 89.0, chargeCooling: 'engine', induction: 'turbo', hotV: true, hp: 340, torque: 500, redline: 6500 },
+            position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro ultra', awd: { kind: 'ultra' }, battery12: 'trunk', transmission: 'dct', gears: 7,
             zeroTo100: 5.1, topSpeed: 250, weight: 1825, rimInches: 20, paint: '#e8e8e6', paintName: 'Glacier White',
             facts: [
               'Standard 48-volt mild-hybrid system lets the engine coast with the engine off between 55 and 160 km/h.',
@@ -133,7 +133,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: '8R', variant: 'Q5 2.0 TFSI quattro', years: '2008–2017', body: 'suv',
             dims: { length: 4629, width: 1880, height: 1653, wheelbase: 2807 },
-            engine: { layout: 'I4', displacement: 2.0, code: 'EA888', induction: 'turbo', hp: 225, torque: 350, redline: 6500 },
+            engine: { layout: 'I4', displacement: 2.0, code: 'EA888', bore: 82.5, stroke: 92.8, chargeCooling: 'front', induction: 'turbo', hp: 225, torque: 350, redline: 6500 },
             position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (Torsen centre diff)', awd: { kind: 'torsen', split: '40:60' }, transmission: 'automatic', gears: 8,
             zeroTo100: 7.1, topSpeed: 222, weight: 1810, rimInches: 19, paint: '#3a4a3c', paintName: 'Lava Grey',
             facts: [
@@ -144,7 +144,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'FY', variant: 'SQ5 3.0 TFSI', years: '2017–2024', body: 'suv',
             dims: { length: 4671, width: 1893, height: 1635, wheelbase: 2824 },
-            engine: { layout: 'V6', displacement: 3.0, code: 'EA839', induction: 'turbo', hotV: true, hp: 354, torque: 500, redline: 6500 },
+            engine: { layout: 'V6', displacement: 3.0, code: 'EA839', bore: 84.5, stroke: 89.0, chargeCooling: 'engine', induction: 'turbo', hotV: true, hp: 354, torque: 500, redline: 6500 },
             position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'quattro (self-locking centre diff)', awd: { kind: 'crown-gear', split: '40:60' }, transmission: 'automatic', gears: 8,
             zeroTo100: 5.4, topSpeed: 250, weight: 1945, rimInches: 21, paint: '#a3262a', paintName: 'Tango Red',
             facts: [
@@ -162,7 +162,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'Type 42', id: 'type42', variant: 'R8 V10', years: '2006–2015', body: 'coupe',
             dims: { length: 4431, width: 1904, height: 1252, wheelbase: 2650 },
-            engine: { layout: 'V10', displacement: 5.2, code: 'BUJ 5.2 FSI', induction: 'NA', hp: 525, torque: 530, redline: 8700 },
+            engine: { layout: 'V10', displacement: 5.2, code: 'BUJ 5.2 FSI', bore: 84.5, stroke: 92.8, induction: 'NA', hp: 525, torque: 530, redline: 8700 },
             position: 'mid', drivetrain: 'AWD', drivetrainName: 'quattro (viscous coupling at the front axle)', awd: { kind: 'viscous-front' }, transmission: 'manual', gears: 6,
             zeroTo100: 3.9, topSpeed: 316, weight: 1620, rimInches: 19, paint: '#d6d8da', paintName: 'Suzuka Grey',
             facts: [
@@ -174,7 +174,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'Type 4S', id: 'type4s', variant: 'R8 V10 performance', years: '2015–2024', body: 'coupe',
             dims: { length: 4429, width: 1940, height: 1240, wheelbase: 2650 },
-            engine: { layout: 'V10', displacement: 5.2, code: 'DKAA 5.2 FSI', induction: 'NA', hp: 620, torque: 580, redline: 8700 },
+            engine: { layout: 'V10', displacement: 5.2, code: 'DKAA 5.2 FSI', bore: 84.5, stroke: 92.8, induction: 'NA', hp: 620, torque: 580, redline: 8700 },
             position: 'mid', drivetrain: 'AWD', drivetrainName: 'quattro (front-axle multi-plate clutch)', awd: { kind: 'clutch-front' }, transmission: 'dct', gears: 7,
             zeroTo100: 3.1, topSpeed: 331, weight: 1595, rimInches: 20, paint: '#e0b200', paintName: 'Vegas Yellow',
             facts: [
@@ -222,7 +222,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'E46', variant: '330i', years: '1998–2006', body: 'sedan',
             dims: { length: 4471, width: 1739, height: 1415, wheelbase: 2725 },
-            engine: { layout: 'I6', displacement: 3.0, code: 'M54B30', induction: 'NA', hp: 231, torque: 300, redline: 6500 },
+            engine: { layout: 'I6', displacement: 3.0, code: 'M54B30', slant: 30, bore: 84, stroke: 89.6, induction: 'NA', hp: 231, torque: 300, redline: 6500 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'manual', gears: 5,
             zeroTo100: 6.5, topSpeed: 250, weight: 1430, rimInches: 17, paint: '#2b3a55', paintName: 'Topaz Blue',
             facts: [
@@ -233,7 +233,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'E90', variant: '335i', years: '2005–2012', body: 'sedan',
             dims: { length: 4520, width: 1817, height: 1421, wheelbase: 2760 },
-            engine: { layout: 'I6', displacement: 3.0, code: 'N54B30', induction: 'twin-turbo', hp: 306, torque: 400, redline: 7000 },
+            engine: { layout: 'I6', displacement: 3.0, code: 'N54B30', bore: 84, stroke: 89.6, chargeCooling: 'front', induction: 'twin-turbo', hp: 306, torque: 400, redline: 7000 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'automatic', gears: 6,
             zeroTo100: 5.6, topSpeed: 250, weight: 1600, rimInches: 18, paint: '#1a1a1c', paintName: 'Black Sapphire',
             facts: [
@@ -244,7 +244,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'F30', variant: '340i', years: '2011–2019', body: 'sedan',
             dims: { length: 4633, width: 1811, height: 1429, wheelbase: 2810 },
-            engine: { layout: 'I6', displacement: 3.0, code: 'B58B30', induction: 'turbo', hp: 326, torque: 450, redline: 7000 },
+            engine: { layout: 'I6', displacement: 3.0, code: 'B58B30', bore: 82, stroke: 94.6, chargeCooling: 'engine', induction: 'turbo', hp: 326, torque: 450, redline: 7000 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'automatic', gears: 8,
             zeroTo100: 5.1, topSpeed: 250, weight: 1615, rimInches: 18, paint: '#ffffff', paintName: 'Alpine White',
             facts: [
@@ -253,9 +253,9 @@ export const BRANDS: Brand[] = [
             ],
           }),
           gen({
-            code: 'G20', variant: 'M340i xDrive', years: '2019–present', body: 'sedan',
+            code: 'G20', fuelTankL: 59, variant: 'M340i xDrive', years: '2019–present', body: 'sedan',
             dims: { length: 4709, width: 1827, height: 1435, wheelbase: 2851 },
-            engine: { layout: 'I6', displacement: 3.0, code: 'B58B30O1', induction: 'turbo', hp: 374, torque: 500, redline: 7000 },
+            engine: { layout: 'I6', displacement: 3.0, code: 'B58B30O1', bore: 82, stroke: 94.6, chargeCooling: 'engine', induction: 'turbo', hp: 374, torque: 500, redline: 7000 },
             position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'xDrive', awd: { kind: 'xdrive' }, transmission: 'automatic', gears: 8,
             zeroTo100: 4.4, topSpeed: 250, weight: 1745, rimInches: 19, paint: '#1f3b73', paintName: 'Portimao Blue',
             facts: [
@@ -273,7 +273,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'E30', variant: 'M3', years: '1986–1991', body: 'coupe',
             dims: { length: 4345, width: 1680, height: 1370, wheelbase: 2562 },
-            engine: { layout: 'I4', displacement: 2.3, code: 'S14B23', induction: 'NA', hp: 195, torque: 230, redline: 7250 },
+            engine: { layout: 'I4', displacement: 2.3, code: 'S14B23', slant: 30, bore: 93.4, stroke: 84, induction: 'NA', hp: 195, torque: 230, redline: 7250 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'manual', gears: 5,
             zeroTo100: 6.7, topSpeed: 235, weight: 1200, rimInches: 15, paint: '#c8102e', paintName: 'Henna Red',
             facts: [
@@ -284,7 +284,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'E46', id: 'e46m3', variant: 'M3', years: '2000–2006', body: 'coupe',
             dims: { length: 4492, width: 1780, height: 1372, wheelbase: 2731 },
-            engine: { layout: 'I6', displacement: 3.2, code: 'S54B32', induction: 'NA', hp: 343, torque: 365, redline: 8000 },
+            engine: { layout: 'I6', displacement: 3.2, code: 'S54B32', bore: 87, stroke: 91, induction: 'NA', hp: 343, torque: 365, redline: 8000 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'manual', gears: 6,
             zeroTo100: 5.2, topSpeed: 250, weight: 1570, rimInches: 18, paint: '#3a6fa4', paintName: 'Laguna Seca Blue',
             facts: [
@@ -295,7 +295,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'E92', variant: 'M3', years: '2007–2013', body: 'coupe',
             dims: { length: 4615, width: 1804, height: 1424, wheelbase: 2761 },
-            engine: { layout: 'V8', displacement: 4.0, code: 'S65B40', induction: 'NA', hp: 420, torque: 400, redline: 8400 },
+            engine: { layout: 'V8', displacement: 4.0, code: 'S65B40', bore: 92, stroke: 75.2, induction: 'NA', hp: 420, torque: 400, redline: 8400 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'dct', gears: 7,
             zeroTo100: 4.6, topSpeed: 250, weight: 1655, rimInches: 19, paint: '#d9d9d6', paintName: 'Mineral White',
             facts: [
@@ -307,7 +307,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'F80', variant: 'M3 Competition', years: '2014–2018', body: 'sedan',
             dims: { length: 4671, width: 1877, height: 1424, wheelbase: 2812 },
-            engine: { layout: 'I6', displacement: 3.0, code: 'S55B30', induction: 'twin-turbo', hp: 450, torque: 550, redline: 7600 },
+            engine: { layout: 'I6', displacement: 3.0, code: 'S55B30', bore: 84, stroke: 89.6, chargeCooling: 'engine', induction: 'twin-turbo', hp: 450, torque: 550, redline: 7600 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'dct', gears: 7,
             zeroTo100: 4.0, topSpeed: 280, weight: 1585, rimInches: 19, paint: '#e7b10a', paintName: 'Austin Yellow',
             facts: [
@@ -318,7 +318,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'G80', variant: 'M3 Competition xDrive', years: '2021–present', body: 'sedan',
             dims: { length: 4794, width: 1903, height: 1433, wheelbase: 2857 },
-            engine: { layout: 'I6', displacement: 3.0, code: 'S58B30', induction: 'twin-turbo', hp: 510, torque: 650, redline: 7200 },
+            engine: { layout: 'I6', displacement: 3.0, code: 'S58B30', bore: 84, stroke: 90, chargeCooling: 'engine', induction: 'twin-turbo', hp: 510, torque: 650, redline: 7200 },
             position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'M xDrive', awd: { kind: 'xdrive' }, transmission: 'automatic', gears: 8,
             zeroTo100: 3.5, topSpeed: 290, weight: 1780, rimInches: 19, paint: '#3c6e47', paintName: 'Isle of Man Green',
             facts: [
@@ -338,7 +338,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'E39', variant: 'M5', years: '1998–2003', body: 'sedan',
             dims: { length: 4784, width: 1800, height: 1437, wheelbase: 2830 },
-            engine: { layout: 'V8', displacement: 4.9, code: 'S62B50', induction: 'NA', hp: 400, torque: 500, redline: 7000 },
+            engine: { layout: 'V8', displacement: 4.9, code: 'S62B50', bore: 94, stroke: 89, induction: 'NA', hp: 400, torque: 500, redline: 7000 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'manual', gears: 6,
             zeroTo100: 5.3, topSpeed: 250, weight: 1795, rimInches: 18, paint: '#1b2a24', paintName: 'Oxford Green',
             facts: [
@@ -349,7 +349,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'G30', variant: '540i', years: '2017–2023', body: 'sedan',
             dims: { length: 4936, width: 1868, height: 1479, wheelbase: 2975 },
-            engine: { layout: 'I6', displacement: 3.0, code: 'B58B30', induction: 'turbo', hp: 340, torque: 450, redline: 7000 },
+            engine: { layout: 'I6', displacement: 3.0, code: 'B58B30', bore: 82, stroke: 94.6, chargeCooling: 'engine', induction: 'turbo', hp: 340, torque: 450, redline: 7000 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'automatic', gears: 8,
             zeroTo100: 5.1, topSpeed: 250, weight: 1670, rimInches: 19, paint: '#4b4f54', paintName: 'Bluestone',
             facts: [
@@ -360,7 +360,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'F90', variant: 'M5 Competition', years: '2018–2024', body: 'sedan',
             dims: { length: 4966, width: 1903, height: 1469, wheelbase: 2982 },
-            engine: { layout: 'V8', displacement: 4.4, code: 'S63B44T4', induction: 'twin-turbo', hotV: true, hp: 625, torque: 750, redline: 7200 },
+            engine: { layout: 'V8', displacement: 4.4, code: 'S63B44T4', bore: 89, stroke: 88.3, chargeCooling: 'engine', induction: 'twin-turbo', hotV: true, hp: 625, torque: 750, redline: 7200 },
             position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'M xDrive', awd: { kind: 'xdrive' }, transmission: 'automatic', gears: 8,
             zeroTo100: 3.3, topSpeed: 305, weight: 1940, rimInches: 20, paint: '#4e5d3d', paintName: 'Frozen Dark Green',
             facts: [
@@ -389,7 +389,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'E53', variant: 'X5 4.4i', years: '1999–2006', body: 'suv',
             dims: { length: 4667, width: 1872, height: 1707, wheelbase: 2820 },
-            engine: { layout: 'V8', displacement: 4.4, code: 'M62B44', induction: 'NA', hp: 286, torque: 440, redline: 6000 },
+            engine: { layout: 'V8', displacement: 4.4, code: 'M62B44', bore: 92, stroke: 82.7, induction: 'NA', hp: 286, torque: 440, redline: 6000 },
             position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'permanent AWD (38:62 planetary centre diff)', awd: { kind: 'planetary', split: '38:62' }, transmission: 'automatic', gears: 5,
             zeroTo100: 7.5, topSpeed: 206, weight: 2170, rimInches: 18, paint: '#2a2f38', paintName: 'Orient Blue',
             facts: [
@@ -400,7 +400,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'G05', variant: 'X5 xDrive40i', years: '2018–present', body: 'suv',
             dims: { length: 4922, width: 2004, height: 1745, wheelbase: 2975 },
-            engine: { layout: 'I6', displacement: 3.0, code: 'B58B30', induction: 'turbo', hp: 381, torque: 540, redline: 7000 },
+            engine: { layout: 'I6', displacement: 3.0, code: 'B58B30', bore: 82, stroke: 94.6, chargeCooling: 'engine', induction: 'turbo', hp: 381, torque: 540, redline: 7000 },
             position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'xDrive', awd: { kind: 'xdrive' }, transmission: 'automatic', gears: 8,
             zeroTo100: 5.4, topSpeed: 250, weight: 2200, rimInches: 21, paint: '#5a6b7a', paintName: 'Phytonic Blue',
             facts: [
@@ -436,7 +436,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'G29', variant: 'Z4 M40i', years: '2018–present', body: 'roadster',
             dims: { length: 4324, width: 1864, height: 1304, wheelbase: 2470 },
-            engine: { layout: 'I6', displacement: 3.0, code: 'B58B30', induction: 'turbo', hp: 340, torque: 500, redline: 7000 },
+            engine: { layout: 'I6', displacement: 3.0, code: 'B58B30', bore: 82, stroke: 94.6, chargeCooling: 'engine', induction: 'turbo', hp: 340, torque: 500, redline: 7000 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'automatic', gears: 8,
             zeroTo100: 4.5, topSpeed: 250, weight: 1610, rimInches: 19, paint: '#a51e2f', paintName: 'San Francisco Red',
             facts: [
@@ -464,7 +464,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'W177', variant: 'A 250', years: '2018–present', body: 'hatch',
             dims: { length: 4419, width: 1796, height: 1440, wheelbase: 2729 },
-            engine: { layout: 'I4', displacement: 2.0, code: 'M260', induction: 'turbo', hp: 224, torque: 350, redline: 6500 },
+            engine: { layout: 'I4', displacement: 2.0, code: 'M260', bore: 83, stroke: 92, chargeCooling: 'front', induction: 'turbo', hp: 224, torque: 350, redline: 6500 },
             position: 'front-transverse', drivetrain: 'FWD', transmission: 'dct', gears: 7,
             zeroTo100: 6.2, topSpeed: 250, weight: 1450, rimInches: 18, paint: '#b51f2e', paintName: 'Jupiter Red',
             facts: [
@@ -482,7 +482,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'W204', variant: 'C 63 AMG', years: '2007–2014', body: 'sedan',
             dims: { length: 4726, width: 1795, height: 1427, wheelbase: 2765 },
-            engine: { layout: 'V8', displacement: 6.2, code: 'M156', induction: 'NA', hp: 457, torque: 600, redline: 7200 },
+            engine: { layout: 'V8', displacement: 6.2, code: 'M156', bore: 102.2, stroke: 94.6, induction: 'NA', hp: 457, torque: 600, redline: 7200 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'automatic', gears: 7,
             zeroTo100: 4.5, topSpeed: 250, weight: 1730, rimInches: 18, paint: '#1c1c1e', paintName: 'Obsidian Black',
             facts: [
@@ -493,7 +493,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'W205', variant: 'C 300', years: '2014–2021', body: 'sedan',
             dims: { length: 4686, width: 1810, height: 1442, wheelbase: 2840 },
-            engine: { layout: 'I4', displacement: 2.0, code: 'M274', induction: 'turbo', hp: 245, torque: 370, redline: 6300 },
+            engine: { layout: 'I4', displacement: 2.0, code: 'M274', bore: 83, stroke: 92, chargeCooling: 'front', induction: 'turbo', hp: 245, torque: 370, redline: 6300 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'automatic', gears: 9,
             zeroTo100: 5.9, topSpeed: 250, weight: 1540, rimInches: 18, paint: '#9a9da1', paintName: 'Iridium Silver',
             facts: [
@@ -504,7 +504,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'W206', variant: 'C 63 S E PERFORMANCE', years: '2023–present', body: 'sedan',
             dims: { length: 4842, width: 1900, height: 1446, wheelbase: 2875 },
-            engine: { layout: 'I4', displacement: 2.0, code: 'M139l', induction: 'turbo', hp: 680, torque: 1020, redline: 7200, hybrid: true, batteryKWh: 6.1, motors: { front: false, rear: true } },
+            engine: { layout: 'I4', displacement: 2.0, code: 'M139l', bore: 83, stroke: 92, induction: 'turbo', hp: 680, torque: 1020, redline: 7200, hybrid: true, batteryKWh: 6.1, motors: { front: false, rear: true } },
             position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'AMG Performance 4MATIC+', awd: { kind: 'clutch-variable' }, transmission: 'automatic', gears: 9,
             zeroTo100: 3.4, topSpeed: 280, weight: 2111, rimInches: 20, paint: '#6a6f73', paintName: 'Graphite Grey',
             facts: [
@@ -523,7 +523,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'W211', variant: 'E 500', years: '2002–2009', body: 'sedan',
             dims: { length: 4818, width: 1822, height: 1452, wheelbase: 2854 },
-            engine: { layout: 'V8', displacement: 5.0, code: 'M113', induction: 'NA', hp: 306, torque: 460, redline: 6000 },
+            engine: { layout: 'V8', displacement: 5.0, code: 'M113', bore: 97, stroke: 84, induction: 'NA', hp: 306, torque: 460, redline: 6000 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'automatic', gears: 7,
             zeroTo100: 6.1, topSpeed: 250, weight: 1730, rimInches: 17, paint: '#2a3446', paintName: 'Tanzanite Blue',
             facts: [
@@ -534,7 +534,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'W213', variant: 'E 450 4MATIC', years: '2016–2023', body: 'sedan',
             dims: { length: 4923, width: 1852, height: 1468, wheelbase: 2939 },
-            engine: { layout: 'I6', displacement: 3.0, code: 'M256', induction: 'turbo', hp: 367, torque: 500, redline: 6500 },
+            engine: { layout: 'I6', displacement: 3.0, code: 'M256', bore: 83, stroke: 92, induction: 'turbo', hp: 367, torque: 500, redline: 6500 },
             position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: '4MATIC', awd: { kind: 'planetary', split: '31:69' }, transmission: 'automatic', gears: 9,
             zeroTo100: 5.0, topSpeed: 250, weight: 1850, rimInches: 19, paint: '#1d1f22', paintName: 'Obsidian Black',
             facts: [
@@ -545,7 +545,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'W214', variant: 'E 350', years: '2023–present', body: 'sedan',
             dims: { length: 4949, width: 1880, height: 1468, wheelbase: 2961 },
-            engine: { layout: 'I4', displacement: 2.0, code: 'M254', induction: 'turbo', hp: 258, torque: 400, redline: 6200 },
+            engine: { layout: 'I4', displacement: 2.0, code: 'M254', bore: 83, stroke: 92, induction: 'turbo', hp: 258, torque: 400, redline: 6200 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'automatic', gears: 9,
             zeroTo100: 6.2, topSpeed: 250, weight: 1795, rimInches: 19, paint: '#d7d7d4', paintName: 'Polar White',
             facts: [
@@ -563,7 +563,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'W221', variant: 'S 600', years: '2005–2013', body: 'sedan',
             dims: { length: 5206, width: 1871, height: 1485, wheelbase: 3165 },
-            engine: { layout: 'V12', displacement: 5.5, code: 'M275', induction: 'twin-turbo', hp: 517, torque: 830, redline: 6000 },
+            engine: { layout: 'V12', displacement: 5.5, code: 'M275', bore: 82, stroke: 87, chargeCooling: 'engine', induction: 'twin-turbo', hp: 517, torque: 830, redline: 6000 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'automatic', gears: 5,
             zeroTo100: 4.6, topSpeed: 250, weight: 2185, rimInches: 18, paint: '#14161a', paintName: 'Obsidian Black',
             facts: [
@@ -574,7 +574,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'W223', variant: 'S 580 4MATIC', years: '2020–present', body: 'sedan',
             dims: { length: 5289, width: 1954, height: 1503, wheelbase: 3216 },
-            engine: { layout: 'V8', displacement: 4.0, code: 'M176', induction: 'twin-turbo', hotV: true, hp: 503, torque: 700, redline: 6500 },
+            engine: { layout: 'V8', displacement: 4.0, code: 'M176', bore: 83, stroke: 92, chargeCooling: 'engine', induction: 'twin-turbo', hotV: true, hp: 503, torque: 700, redline: 6500 },
             position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: '4MATIC', awd: { kind: 'planetary', split: '45:55' }, transmission: 'automatic', gears: 9,
             zeroTo100: 4.4, topSpeed: 250, weight: 2245, rimInches: 20, paint: '#253046', paintName: 'Nautical Blue',
             facts: [
@@ -592,7 +592,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'W463', variant: 'G 55 AMG', years: '1990–2018', body: 'offroad',
             dims: { length: 4662, width: 1760, height: 1931, wheelbase: 2850 },
-            engine: { layout: 'V8', displacement: 5.4, code: 'M113K', induction: 'supercharged', hp: 507, torque: 700, redline: 6000 },
+            engine: { layout: 'V8', displacement: 5.4, code: 'M113K', bore: 97, stroke: 92, chargeCooling: 'engine', induction: 'supercharged', hp: 507, torque: 700, redline: 6000 },
             position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'permanent AWD + 3 locking diffs', awd: { kind: 'g-locks', split: '50:50' }, transmission: 'automatic', gears: 5,
             zeroTo100: 5.5, topSpeed: 210, weight: 2550, rimInches: 19, paint: '#2a2a2a', paintName: 'Obsidian Black',
             facts: [
@@ -603,7 +603,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'W463A', id: 'w463a', variant: 'G 63 AMG', years: '2018–present', body: 'offroad',
             dims: { length: 4873, width: 1984, height: 1966, wheelbase: 2890 },
-            engine: { layout: 'V8', displacement: 4.0, code: 'M177', induction: 'twin-turbo', hotV: true, hp: 585, torque: 850, redline: 6500 },
+            engine: { layout: 'V8', displacement: 4.0, code: 'M177', bore: 83, stroke: 92, chargeCooling: 'engine', induction: 'twin-turbo', hotV: true, hp: 585, torque: 850, redline: 6500 },
             position: 'front-longitudinal', drivetrain: 'AWD', drivetrainName: 'AMG Performance 4MATIC + 3 locking diffs', awd: { kind: 'g-locks', split: '40:60' }, transmission: 'automatic', gears: 9,
             zeroTo100: 4.5, topSpeed: 220, weight: 2560, rimInches: 22, paint: '#4c5a3a', paintName: 'Desert Sand / Olive',
             facts: [
@@ -622,7 +622,7 @@ export const BRANDS: Brand[] = [
           gen({
             code: 'C190', variant: 'AMG GT R', years: '2014–2021', body: 'coupe',
             dims: { length: 4551, width: 2007, height: 1284, wheelbase: 2630 },
-            engine: { layout: 'V8', displacement: 4.0, code: 'M178', induction: 'twin-turbo', hotV: true, hp: 585, torque: 700, redline: 7200 },
+            engine: { layout: 'V8', displacement: 4.0, code: 'M178', bore: 83, stroke: 92, chargeCooling: 'engine', induction: 'twin-turbo', hotV: true, hp: 585, torque: 700, redline: 7200 },
             position: 'front-longitudinal', drivetrain: 'RWD', transmission: 'dct', gears: 7,
             zeroTo100: 3.6, topSpeed: 318, weight: 1630, rimInches: 20, paint: '#4d8c2a', paintName: 'Green Hell Magno',
             facts: [

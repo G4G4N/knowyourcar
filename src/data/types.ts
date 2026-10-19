@@ -62,6 +62,14 @@ export interface Generation {
     /** litres, 0 for EV */
     displacement: number;
     code?: string;
+    /** real bore × stroke in mm when known; otherwise estimated from displacement */
+    bore?: number;
+    stroke?: number;
+    /** where compressed air is cooled: a front-mounted air-to-air intercooler, or a water-cooled
+     * charge-air cooler on the engine (in the plenum / the V) fed by a low-temperature radiator */
+    chargeCooling?: 'front' | 'engine';
+    /** installation slant in degrees, top of the block leaning right (BMW inline engines) */
+    slant?: number;
     induction: Induction;
     /** Turbos inside the V of the engine ("hot-V") */
     hotV?: boolean;
@@ -78,6 +86,10 @@ export interface Generation {
   /** Brand name for AWD system etc. */
   drivetrainName?: string;
   awd?: Awd;
+  /** 12 V battery location when it differs from the brand default */
+  battery12?: 'front' | 'trunk';
+  /** fuel tank capacity in litres, only where confirmed */
+  fuelTankL?: number;
   transmission: Transmission;
   gears: number;
   zeroTo100: number; // seconds

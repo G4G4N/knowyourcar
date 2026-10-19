@@ -70,6 +70,7 @@ export function Flows({ l, rig }: { l: Layout; rig: Rig }) {
       if (rig.turbos.length) {
         pts.push(rig.engineToWorld(rig.turbos[0].local.clone().add(v(0.11, 0, 0))));
         if (rig.intercooler) pts.push(v(rig.radiator.x + 0.06, rig.radiator.y, -0.2), v(rig.radiator.x + 0.06, rig.radiator.y, 0.2));
+        if (rig.chargeCooler) pts.push(rig.chargeCooler.clone());
       }
       pts.push(plenum);
       out.push({ points: pts, color: '#56c8ff', count: 70, speed: 0.22 });

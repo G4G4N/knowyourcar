@@ -139,6 +139,7 @@ export function Engine({ l, g, brand, rig }: { l: Layout; g: Generation; brand: 
 
   return (
     <group position={[e.x, e.y, e.z]} rotation={[0, rig.engineRotY, 0]}>
+      <group rotation={[rig.engineSlant, 0, 0]}>
       <Part id="engineBlock">
         {e.banks === 1 ? (
           <mesh position={[0, (e.deckH - 0.07) / 2, 0]} material={blockMat}>
@@ -311,6 +312,7 @@ export function Engine({ l, g, brand, rig }: { l: Layout; g: Generation; brand: 
           </group>
         </Part>
       )}
+      </group>
     </group>
   );
 }

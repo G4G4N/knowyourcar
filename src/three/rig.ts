@@ -9,6 +9,8 @@ const v = (x: number, y: number, z: number) => new THREE.Vector3(x, y, z);
 export interface Rig {
   engineToWorld: (p: THREE.Vector3) => THREE.Vector3;
   engineRotY: number;
+  /** slant about the crank axis (radians), applied before engineRotY */
+  engineSlant: number;
   ice: boolean;
   ev: boolean;
   hybrid: boolean;
@@ -23,6 +25,8 @@ export interface Rig {
   tailpipes: { pos: THREE.Vector3; dir: 'x' | 'z'; shape: 'round' | 'oval' | 'trap'; r: number }[];
   radiator: { x: number; y: number; w: number; h: number };
   intercooler: boolean;
+  /** water-cooled charge-air cooler on the engine (world position), when the engine has one */
+  chargeCooler: THREE.Vector3 | null;
   gearbox: { from: THREE.Vector3; to: THREE.Vector3; r0: number; r1: number } | null;
   propShaft: { from: THREE.Vector3; to: THREE.Vector3 } | null;
   frontProp: { from: THREE.Vector3; to: THREE.Vector3 } | null;
@@ -47,7 +51,9 @@ export function computeRig(l: Layout, g: Generation, brand: Brand, rearX?: (y: n
   const hybrid = !!g.engine.hybrid;
   const rotY = e?.transverse ? -Math.PI / 2 : 0;
   const origin = e ? v(e.x, e.y, e.z) : v(0, 0, 0);
-  const engineToWorld = (p: THREE.Vector3) => p.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), rotY).add(origin);
+  const slant = ((g.engine.slant ?? 0) * Math.PI) / 180;
+  const engineToWorld = (p: THREE.Vector3) =>
+    p.clone().applyAxisAngle(new THREE.Vector3(1, 0, 0), slant).applyAxisAngle(new THREE.Vector3(0, 1, 0), rotY).add(origin);
 
   const turbos: Rig['turbos'] = [];
   const plenums: Rig['plenums'] = [];
@@ -74,7 +80,9 @@ export function computeRig(l: Layout, g: Generation, brand: Brand, rearX?: (y: n
         xs.forEach((x, i) => turbos.push({ local: v(x, e.deckH * 1.05, twin ? (i === 0 ? 0.06 : -0.06) : 0), world: v(0, 0, 0), side: 0 }));
         for (const s of [1, -1]) plenums.push({ local: deckLocal(s, e.bore * 1.1, e.deckH + 0.05), side: s });
       } else {
-        plenums.push({ local: v(0, e.deckH * 1.15, 0), side: 0 });
+        // Mid-engined V10 (R8): the intake plenum sits high in the V on long runners, right under
+        // the rear glass, which is why the engine is on show from outside.
+        plenums.push({ local: v(0, e.deckH * 1.15 + (g.position === 'mid' ? 0.24 : 0), 0), side: 0 });
         if (ind === 'supercharged') supercharger = v(0, e.deckH * 1.25, 0);
         if (turbo) for (const s of [1, -1]) turbos.push({ local: deckLocal(s, e.bore * 1.9, e.deckH * 0.25), world: v(0, 0, 0), side: s });
       }
@@ -240,7 +248,7 @@ export function computeRig(l: Layout, g: Generation, brand: Brand, rearX?: (y: n
       : { x: (l.rearSeatX ?? l.xRA + 0.5) + 0.05, y: l.gc + 0.04, w: l.W * 0.55, l: 0.45, h: 0.24 }
     : null;
   const battery12 =
-    brand.id !== 'audi' && !ev
+    g.battery12 === 'trunk' || (g.battery12 !== 'front' && brand.id !== 'audi' && !ev)
       ? v(l.xRear + 0.45, l.gc + 0.25, 0.42)
       : ev
         ? v(l.xFront - 0.5, l.belt - 0.3, 0.35)
@@ -249,6 +257,7 @@ export function computeRig(l: Layout, g: Generation, brand: Brand, rearX?: (y: n
   return {
     engineToWorld,
     engineRotY: rotY,
+    engineSlant: slant,
     ice,
     ev,
     hybrid,
@@ -261,7 +270,8 @@ export function computeRig(l: Layout, g: Generation, brand: Brand, rearX?: (y: n
     muffler,
     tailpipes,
     radiator: { x: l.xFront - 0.2, y: l.gc + 0.14, w: l.W * 0.62, h: Math.min(0.45, l.noseTop - l.gc - 0.2) },
-    intercooler: g.engine.induction === 'turbo' || g.engine.induction === 'twin-turbo',
+    intercooler: (g.engine.induction === 'turbo' || g.engine.induction === 'twin-turbo') && g.engine.chargeCooling !== 'engine',
+    chargeCooler: e && g.engine.chargeCooling === 'engine' && plenums.length ? engineToWorld(plenums[0].local.clone().add(v(0, -0.05, 0))) : null,
     gearbox,
     propShaft,
     frontProp,

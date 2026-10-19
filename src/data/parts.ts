@@ -373,7 +373,7 @@ export function partSpecs(id: PartId, g: Generation, brand: Brand): [string, str
     case 'wheels':
       return [['Rim size', `${g.rimInches}"`]];
     case 'fuelTank':
-      return [['Typical capacity', `${g.body === 'suv' || g.body === 'offroad' ? '80–100' : g.body === 'hatch' ? '50–55' : '60–80'} L`]];
+      return g.fuelTankL ? [['Capacity', `${g.fuelTankL} L`]] : [];
     case 'transferCase': {
       const a = awdCopy(g);
       return [
@@ -608,6 +608,18 @@ export function partCopy(id: PartId, g: Generation): { name: string; summary: st
     const a = awdCopy(g);
     return { name: a.name, summary: a.summary, how: a.how };
   }
+  if (id === 'intercooler' && g.engine.chargeCooling === 'engine')
+    return {
+      name: 'Charge-air cooler (water-cooled)',
+      summary: 'Cools the compressed air right on the engine, using its own coolant circuit.',
+      how: 'Instead of piping hot boost air to the front of the car and back, this engine cools it in a compact water-to-air cooler built into the intake (in the plenum or the V). A separate low-temperature coolant circuit, with its own small radiator up front and an electric pump, carries the heat away. The short air path means less volume to pressurise, so the turbo responds faster.',
+    };
+  if (id === 'intercooler' && g.engine.chargeCooling === 'front')
+    return {
+      name: 'Intercooler (air-to-air)',
+      summary: 'A front-mounted radiator for the compressed intake air.',
+      how: 'Boost air leaves the turbo at well over 100 °C and is piped to an air-to-air intercooler behind the front bumper, where airflow through the fins cools it before it returns to the throttle and intake manifold. Simple and effective, at the cost of a long air path.',
+    };
   if (id === 'rearDiff' && g.awd?.kind === 'ultra')
     return { ...PARTS.rearDiff, how: PARTS.rearDiff.how + ' On quattro ultra a dog clutch inside it disconnects the half-shafts when the rear axle isn’t needed.' };
   if (id === 'frontDiff' && g.position === 'front-longitudinal' && g.awd && ['torsen', 'crown-gear', 'ultra'].includes(g.awd.kind))
