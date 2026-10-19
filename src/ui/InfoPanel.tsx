@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { PARTS, SYSTEMS, layoutName, partSpecs, tourSteps, transmissionName, type PartId } from '../data/parts';
+import { PARTS, SYSTEMS, layoutName, partCopy, partSpecs, tourSteps, transmissionName, type PartId } from '../data/parts';
 import type { SystemId } from '../data/types';
 import { useCurrent, useStore } from '../store';
 import { IconArrow, IconClose } from './icons';
@@ -12,10 +12,10 @@ export function InfoPanel() {
   const select = useStore((s) => s.select);
   const setTour = useStore((s) => s.setTour);
   const setXray = useStore((s) => s.setXray);
-  const steps = useMemo(() => tourSteps(g), [g]);
+  const steps = useMemo(() => tourSteps(g, brand.id), [g]);
 
   if (selected) {
-    const p = PARTS[selected];
+    const p = { ...PARTS[selected], ...partCopy(selected, g) };
     const sys = SYSTEMS[p.system];
     const specs = partSpecs(selected, g, brand);
     const step = tour !== null ? steps[tour] : null;
@@ -90,7 +90,7 @@ export function InfoPanel() {
       <h2>{g.variant}</h2>
       <div className="years">{g.years}</div>
       <div className="hero-stats">
-        <Stat v={g.engine.hp} u="hp" l="Power" />
+        <Stat v={g.engine.hp} u="PS" l="Power" />
         <Stat v={g.engine.torque} u="Nm" l="Torque" />
         <Stat v={g.zeroTo100} u="s" l="0–100 km/h" />
         <Stat v={g.topSpeed} u="km/h" l="Top speed" />

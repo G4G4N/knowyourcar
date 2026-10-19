@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { PARTS, SYSTEMS } from '../data/parts';
+import { PARTS, SYSTEMS, partCopy } from '../data/parts';
 import type { SystemId } from '../data/types';
 import { engineSound } from '../audio';
 import { sim, useCurrent, useStore, type ViewPreset } from '../store';
@@ -172,6 +172,7 @@ export function Gauges() {
 
 export function HoverTip() {
   const hovered = useStore((s) => s.hovered);
+  const { generation: g } = useCurrent();
   const [pos, setPos] = useState({ x: 0, y: 0 });
   useEffect(() => {
     const on = (e: PointerEvent) => setPos({ x: e.clientX, y: e.clientY });
@@ -183,7 +184,7 @@ export function HoverTip() {
   return (
     <div className="hover-tip" style={{ left: pos.x + 14, top: pos.y + 14 }}>
       <small>{SYSTEMS[p.system].label}</small>
-      {p.name}
+      {partCopy(hovered, g).name}
     </div>
   );
 }
