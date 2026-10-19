@@ -1080,13 +1080,72 @@ button {
   .model-loader { top: 26%; }
 }
 
-/* Phones: arrow button that tucks the info sheet, system chips, gauges and dock out of the way */
+/* Arrow button that tucks the panels out of the way so the car gets the whole view */
 .sheet-toggle {
-  display: none;
+  display: grid;
+  place-items: center;
+  position: fixed;
+  left: 50%;
+  bottom: 84px;
+  width: 36px;
+  height: 36px;
+  margin-left: -18px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(14, 19, 28, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #cfe6ff;
+  z-index: 30;
+  cursor: pointer;
+  transition: transform 0.25s ease, bottom 0.3s ease, border-color 0.2s ease;
+}
+.sheet-toggle:hover {
+  border-color: rgba(95, 212, 255, 0.5);
+}
+@media (min-width: 901px) {
+  .app.sheet-hidden .sheet-toggle {
+    bottom: 16px;
+    transform: rotate(180deg);
+  }
+  .garage,
+  .info,
+  .system-filter,
+  .dock,
+  .gauges {
+    transition: transform 0.35s ease, opacity 0.25s ease;
+  }
+  .app.sheet-hidden .garage {
+    transform: translateX(calc(-100% - 32px));
+    opacity: 0;
+    pointer-events: none;
+  }
+  .app.sheet-hidden .info {
+    transform: translateX(calc(100% + 32px));
+    opacity: 0;
+    pointer-events: none;
+  }
+  .app.sheet-hidden .system-filter {
+    transform: translate(-50%, -160px);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .app.sheet-hidden .dock {
+    transform: translate(-50%, 160px);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .app.sheet-hidden .gauges,
+  .app.sheet-hidden .hint {
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 @media (max-width: 900px) {
   .sheet-toggle {
     display: grid;
+    left: auto;
+    margin-left: 0;
     place-items: center;
     position: fixed;
     right: 12px;
